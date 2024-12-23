@@ -1,149 +1,168 @@
-# WinServerSecurityCheck.ps1
+# Windows Server Security Check Script
 
-### Purpose
-Performs comprehensive security assessment of Windows Server environments, checking for common security misconfigurations, vulnerabilities, and compliance issues. This script helps maintain security standards across Windows Server deployments.
+## Overview
+Enhanced security misconfiguration checker for Windows Server 2016, 2019, and 2022. This script performs comprehensive security audits and generates detailed HTML reports of findings.
 
-### Features
-- Windows Server security settings audit
-- Server role-specific security checks
-- Active Directory security assessment
-- IIS security configuration check
-- SQL Server security verification
-- Network service security
-- Compliance verification
-- Remote access security
-- Backup configuration check
+## Features
+- Domain membership and local account verification
+- Password policy and security settings validation
+- Critical services monitoring with compliance checks
+- Certificate validation and expiration monitoring
+- Windows Features status verification
+- Network share permissions auditing
+- Scheduled tasks analysis
+- Local administrator group membership monitoring
+- Detailed HTML report generation with color-coded findings
+- Comprehensive logging with severity levels
 
-### Requirements
+## Prerequisites
 - Windows Server 2016 or later
 - PowerShell 5.1 or later
-- Administrative privileges
-- Server role-specific tools
-- .NET Framework 4.7.2 or later
+- Administrator privileges
+- Required PowerShell modules:
+  - ActiveDirectory (for domain-joined servers)
+  - DnsServer (for DNS checks)
+  - DhcpServer (for DHCP checks)
 
-### Usage
+## Parameters
+- `LogPath` (string)
+  - Path where logs and reports will be stored
+  - Default: "C:\SecurityLogs"
+
+- `GenerateHTML` (switch)
+  - Enable HTML report generation
+  - Default: true
+
+- `IncludeCertificates` (switch)
+  - Include certificate validation in checks
+  - Default: true
+
+- `CheckShares` (switch)
+  - Enable network share auditing
+  - Default: true
+
+## Usage Examples
+
+### Basic Usage
 ```powershell
-.\WinServerSecurityCheck.ps1 [-Roles <roles>] [-Report] [-Fix] [-Compliance <profile>]
-
-Parameters:
-  -Roles        Specify server roles to check
-  -Report       Generate detailed HTML report
-  -Fix         Attempt to fix found issues
-  -Compliance  Check against specific compliance profile
+.\WinServerSecurityCheck.ps1
 ```
 
-### Security Checks Performed
-
-1. **Base Server Security**
-   - Windows Update status
-   - Security patch level
-   - System integrity
-   - Service configurations
-   - Event log settings
-   - Server hardening status
-
-2. **Role-Specific Security**
-   - Active Directory security (if DC)
-   - IIS security configuration
-   - SQL Server security settings
-   - Exchange Server security
-   - File server security
-   - Remote access services
-
-3. **Network Security**
-   - Windows Firewall rules
-   - Network protocol security
-   - Remote management settings
-   - SSL/TLS configuration
-   - IPSec policies
-   - Port security
-
-4. **Access Control**
-   - Administrative access
-   - Service accounts
-   - Privileged groups
-   - Password policies
-   - Login restrictions
-   - User rights assignment
-
-### Configuration
-The script uses a JSON configuration file:
-```json
-{
-    "ServerRoles": {
-        "ActiveDirectory": true,
-        "IIS": true,
-        "SQLServer": false,
-        "FileServer": true
-    },
-    "SecurityChecks": {
-        "SystemUpdates": true,
-        "Services": true,
-        "Firewall": true,
-        "EventLogs": true
-    },
-    "Reporting": {
-        "OutputPath": "C:\\SecurityReports",
-        "SendEmail": true,
-        "DetailLevel": "Verbose"
-    }
-}
+### Custom Log Path
+```powershell
+.\WinServerSecurityCheck.ps1 -LogPath "D:\Audit\Logs"
 ```
+
+### Skip Certificate Checks
+```powershell
+.\WinServerSecurityCheck.ps1 -IncludeCertificates:$false
+```
+
+### Text-Only Output (No HTML)
+```powershell
+.\WinServerSecurityCheck.ps1 -GenerateHTML:$false
+```
+
+## Output
+The script generates two types of output:
+1. Log file (text)
+   - Timestamped entries
+   - Severity levels (Info, Warning, Error)
+   - Detailed error messages and findings
+
+2. HTML Report (if enabled)
+   - Color-coded findings
+   - Organized sections for each check type
+   - Interactive tables
+   - Visual indicators for issues
 
 ### Report Sections
-The security report includes:
-- Executive Summary
-- Critical Findings
-- Role-Specific Issues
-- System Security Status
-- Compliance Status
-- Remediation Steps
-- Technical Details
-- Recommendations
+- System Information
+- Domain Status
+- Service Status
+- Certificate Status (if enabled)
+- Network Shares (if enabled)
+- Local Administrators
+- Windows Features
+- Scheduled Tasks
 
-### Error Handling
-- Validates administrative rights
-- Checks role prerequisites
-- Logs all operations
-- Handles access denied scenarios
-- Reports check failures
-- Provides error solutions
+## Exit Codes
+- 0: Success
+- 1: Error during execution
+- 2: Completed with critical/error findings
 
-### Log Files
-The script maintains logs in:
-- Main log: `C:\Windows\Logs\ServerSecurityCheck.log`
-- Report file: `C:\SecurityReports\<timestamp>_ServerSecurityReport.html`
-- Error log: `C:\Windows\Logs\ServerSecurityErrors.log`
+## Monitored Services
+The script checks the following critical services:
+- Windows Update (wuauserv)
+- Windows Defender (WinDefend)
+- Windows Event Log (EventLog)
+- Task Scheduler (Schedule)
+- Background Intelligent Transfer (BITS)
+- Cryptographic Services (CryptSvc)
 
-### Security Features
-- Safe read-only operations
-- Encrypted report options
-- Secure logging practices
-- No sensitive data exposure
-- Audit trail maintenance
-- Compliance tracking
+## Security Checks
+1. Domain Status
+   - Domain membership
+   - Domain controller role
+   - Domain name verification
 
-### Compliance Profiles
-Built-in compliance checks for:
-- CIS Benchmarks
-- NIST Guidelines
-- HIPAA Requirements
-- PCI DSS Standards
-- SOX Requirements
-- Custom Profiles
+2. Service Status
+   - Running state
+   - Startup type
+   - Configuration compliance
 
-### Best Practices
-- Run daily security checks
-- Review all findings
-- Document exceptions
-- Maintain baseline
-- Update compliance profiles
-- Monitor trends
-- Address critical issues
-- Keep reports archived
-- Regular policy updates
-- Staff training
-- Incident response planning
-- Regular tool updates
-- Role-specific audits
-- Backup verification
+3. Certificate Status
+   - Expired certificates
+   - Certificates expiring within 30 days
+   - Certificate store health
+
+4. Network Shares
+   - Share permissions
+   - Everyone access warnings
+   - Path validation
+
+5. Local Administrators
+   - Non-default admin accounts
+   - Source verification
+   - Group membership audit
+
+6. Scheduled Tasks
+   - System-level tasks
+   - Failed task detection
+   - Suspicious configurations
+
+## Best Practices
+1. Run regularly as part of maintenance
+2. Review HTML reports for visual indicators
+3. Address warnings and errors promptly
+4. Maintain logs for compliance
+5. Use with other security tools
+
+## Error Handling
+- Comprehensive try-catch blocks
+- Detailed error logging
+- Graceful degradation for optional checks
+- Continued execution on non-critical failures
+
+## Customization
+The script can be customized by:
+1. Modifying the `$criticalServices` hashtable
+2. Adjusting warning thresholds
+3. Adding custom checks
+4. Modifying HTML report styling
+
+## Integration
+This script works well with:
+- Task Scheduler
+- RMM platforms
+- Monitoring solutions
+- Compliance frameworks
+
+## Author
+System Administrator
+
+## Version
+1.0
+
+## Last Updated
+2024
