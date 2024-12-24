@@ -8,6 +8,27 @@ This repository contains a powerful suite of scripts designed for IT professiona
 
 ## 🎯 Script Categories
 
+### 📋 Microsoft 365 Troubleshooting Guides
+- **[L1 Troubleshooting Guide](L1_M365_Troubleshooting_Guide/)** - First-line support guide
+  - Comprehensive client question sets for accurate problem identification
+  - Common issues and solutions for basic M365 problems
+  - Step-by-step diagnostic procedures
+  - Service-specific troubleshooting workflows
+  - Clear escalation paths
+- **[L2 Troubleshooting Guide](L2_M365_Troubleshooting_Guide/)** - Advanced support guide
+  - Complex scenario resolution
+  - PowerShell diagnostic commands
+  - Advanced network troubleshooting
+  - Performance optimization techniques
+  - Detailed technical analysis
+- **[L3 Troubleshooting Guide](L3_M365_Troubleshooting_Guide/)** - Enterprise-level support guide
+  - Enterprise architecture troubleshooting
+  - Complex hybrid scenarios
+  - Advanced identity federation
+  - Cross-forest Exchange issues
+  - Performance at scale solutions
+  - Custom solution development
+
 ### 📊 Automated Monitoring
 - **[M365Monitor](AutomatedMonitoring/M365Monitor/)** - Advanced Microsoft 365 monitoring solution
   - Exchange Online monitoring
@@ -175,6 +196,3 @@ This repository contains a powerful suite of scripts designed for IT professiona
 - **Supported Technologies**: 25+
 - **Configuration Templates**: 30+
 
-## 📝 License
-
-This repository is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
