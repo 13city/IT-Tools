@@ -1,0 +1,110 @@
+{
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "ℹ️ INFO ALERT - For Awareness",
+        "emoji": true
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*Device:*\n{{ alert.device_name }} ({{ alert.device_ip }})"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Metric:*\n{{ alert.metric_name }}"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*Current Value:*\n{{ alert.metric_value }}"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Baseline:*\n{{ alert.threshold }}"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Description:*\n{{ alert.description }}"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*📊 Trend Analysis:*"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "{% if alert.previous_occurrences %}• Pattern: {{ alert.previous_occurrences | length }} occurrences in the last 24 hours\n• Last seen: {{ alert.previous_occurrences | last | datetime }}{% else %}First occurrence of this condition{% endif %}"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*🔍 Monitoring Notes:*\n• This is an informational alert for awareness and trending\n• No immediate action required\n• Will be included in daily/weekly reports"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "Alert ID: {{ alert.id }} | Generated: {{ alert.timestamp | datetime }}"
+        }
+      ]
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "View Details",
+            "emoji": true
+          },
+          "value": "details_{{ alert.id }}"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "View Trends",
+            "emoji": true
+          },
+          "value": "trends_{{ alert.id }}"
+        }
+      ]
+    }
+  ]
+}

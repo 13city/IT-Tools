@@ -4,9 +4,20 @@ A comprehensive collection of advanced IT administration scripts for Windows and
 
 ## 🌟 Overview
 
-This repository contains a powerful suite of scripts designed for IT professionals, system administrators, and DevOps engineers. Each script is crafted to address specific enterprise IT needs, from security hardening to database management.
+This repository contains a powerful suite of scripts designed for IT professionals, system administrators, and DevOps engineers. Each script is crafted to address specific enterprise IT needs, from security hardening to database management and comprehensive system monitoring.
 
 ## 🎯 Script Categories
+
+### 📊 Automated Monitoring
+- **[M365Monitor](AutomatedMonitoring/M365Monitor/)** - Advanced Microsoft 365 monitoring solution
+  - Exchange Online monitoring
+  - SharePoint Online monitoring
+  - Teams service monitoring
+- **[NetworkMonitor](AutomatedMonitoring/NetworkMonitor/)** - Enterprise network monitoring system
+  - Real-time metrics collection
+  - Topology mapping
+  - Alert management
+  - Multi-platform notification integration
 
 ### 📚 Enterprise IT Playbook
 - **[EnterpriseITPlaybook](EnterpriseITPlaybook/)** - Comprehensive diagnostic and troubleshooting framework for Tier 2/3 support
@@ -25,6 +36,7 @@ This repository contains a powerful suite of scripts designed for IT professiona
 - **[linux_desktop_security_check.sh](Linux/linux_desktop_security_check.sh)** - Linux desktop security validation
 - **[cloud_linux_security_check.sh](Linux/cloud_linux_security_check.sh)** - Cloud-hosted Linux security
 - **[container_security_check.sh](Linux/container_security_check.sh)** - Container environment security
+- **[vault_secret_scanner.sh](Linux/vault_secret_scanner.sh)** - HashiCorp Vault security scanning
 
 ### 💾 Database Management
 
@@ -53,6 +65,8 @@ This repository contains a powerful suite of scripts designed for IT professiona
 - **[HyperV-HealthCheck.ps1](Windows/HyperV-HealthCheck.ps1)** - Hyper-V health monitoring
 - **[HyperV-MigrationManager.ps1](Windows/HyperV-MigrationManager.ps1)** - VM migration management
 - **[HyperV-ResourceMonitor.ps1](Windows/HyperV-ResourceMonitor.ps1)** - Resource utilization tracking
+- **[Check-HyperVHealth.ps1](Windows/Check-HyperVHealth.ps1)** - Core health metrics monitoring
+- **[EnhancedHyperVHealth.ps1](Windows/EnhancedHyperVHealth.ps1)** - Advanced health monitoring
 
 ### 🔄 System Administration
 
@@ -63,6 +77,9 @@ This repository contains a powerful suite of scripts designed for IT professiona
 - **[HotfixComplianceChecker.ps1](Windows/HotfixComplianceChecker.ps1)** - Update compliance
 - **[ServerPerformanceOptimizer.ps1](Windows/ServerPerformanceOptimizer.ps1)** - Performance optimization
 - **[AD-HealthMonitor.ps1](Windows/AD-HealthMonitor.ps1)** - Active Directory health
+- **[UserSettingMigration.ps1](Windows/UserSettingMigration.ps1)** - User profile migration
+- **[NewEmployeeOnboarding.ps1](Windows/NewEmployeeOnboarding.ps1)** - Employee onboarding automation
+- **[ComprehensiveHealthMonitoring.ps1](Windows/ComprehensiveHealthMonitoring.ps1)** - Enterprise-wide monitoring
 
 #### Linux Administration
 - **[initialize_linux.sh](Linux/initialize_linux.sh)** - System initialization
@@ -92,7 +109,6 @@ This repository contains a powerful suite of scripts designed for IT professiona
 ### 🔑 Security & Access Management
 - **[CrossForestUserMigration.ps1](Windows/CrossForestUserMigration.ps1)** - AD forest migration
 - **[SqlUserPermissionSetup.ps1](Windows/SqlUserPermissionSetup.ps1)** - SQL permissions
-- **[vault_secret_scanner.sh](Linux/vault_secret_scanner.sh)** - HashiCorp Vault scanning
 
 ## 🚀 Features
 
@@ -104,10 +120,61 @@ This repository contains a powerful suite of scripts designed for IT professiona
 - **Performance Optimization**: System performance monitoring and optimization
 - **Best Practices**: Implementation of industry standards and best practices
 
-## 📊 Script Statistics
+## 💻 Technologies Supported
 
-- **Total Scripts**: 50+
-- **Windows Scripts**: 35+
+### Operating Systems
+- Windows Server (2012 R2 through 2022)
+- Windows Desktop (10, 11)
+- Linux (RHEL, Ubuntu, CentOS, Debian)
+- Container Platforms (Docker, Kubernetes)
+
+### Cloud Platforms
+- Microsoft Azure
+- Microsoft 365 (Exchange Online, SharePoint, Teams)
+- AWS
+- Google Cloud Platform
+
+### Virtualization
+- Hyper-V
+- VMware
+- Azure Virtual Machines
+- AWS EC2
+
+### Databases
+- Microsoft SQL Server
+- MySQL/MariaDB
+- PostgreSQL
+- MongoDB
+
+### Network & Security
+- Cisco Meraki
+- SonicWall
+- Windows Firewall
+- iptables
+- HashiCorp Vault
+
+### Backup Solutions
+- Veeam
+- Datto
+- Windows Server Backup
+- Azure Backup
+
+### Monitoring & Management
+- Active Directory
+- Microsoft Intune
+- RMM Platforms
+- SNMP
+- Network Protocols (DNS, DHCP, etc.)
+
+## 📊 Repository Statistics
+
+- **Total Scripts**: 55+
+- **Windows Scripts**: 40+
 - **Linux Scripts**: 15+
-- **Categories**: 8 major categories
-- **Supported Platforms**: Windows Server, Windows Desktop, Linux Server, Linux Desktop, Azure, AWS, GCP
+- **Categories**: 9 major categories
+- **Supported Technologies**: 25+
+- **Configuration Templates**: 30+
+
+## 📝 License
+
+This repository is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

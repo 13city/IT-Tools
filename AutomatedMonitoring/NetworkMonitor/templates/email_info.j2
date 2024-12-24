@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            background-color: #0dcaf0;
+            color: #333;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .metric-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0dcaf0;
+        }
+        .trend-analysis {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .monitoring-notes {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .footer {
+            margin-top: 20px;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0dcaf0;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        .chart-container {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ℹ️ INFO ALERT - For Awareness</h1>
+    </div>
+    
+    <div class="content">
+        <div class="section">
+            <h2>Monitoring Update</h2>
+            <table>
+                <tr>
+                    <th>Device</th>
+                    <td>{{ alert.device_name }} ({{ alert.device_ip }})</td>
+                </tr>
+                <tr>
+                    <th>Metric</th>
+                    <td>{{ alert.metric_name }}</td>
+                </tr>
+                <tr>
+                    <th>Current Value</th>
+                    <td class="metric-value">{{ alert.metric_value }}</td>
+                </tr>
+                <tr>
+                    <th>Baseline</th>
+                    <td>{{ alert.threshold }}</td>
+                </tr>
+                <tr>
+                    <th>Time</th>
+                    <td>{{ alert.timestamp | datetime }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section trend-analysis">
+            <h2>📊 Trend Analysis</h2>
+            <div class="chart-container">
+                <h3>24-Hour Trend</h3>
+                <p>
+                    {% if alert.previous_occurrences %}
+                    <strong>Pattern:</strong> {{ alert.previous_occurrences | length }} occurrences<br>
+                    <strong>Frequency:</strong> {{ (24 / alert.previous_occurrences | length) | round(1) }} hours between occurrences<br>
+                    <strong>First Seen:</strong> {{ alert.previous_occurrences | first | datetime }}<br>
+                    <strong>Last Seen:</strong> {{ alert.previous_occurrences | last | datetime }}
+                    {% else %}
+                    First occurrence of this condition
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <div class="section monitoring-notes">
+            <h2>🔍 Monitoring Notes</h2>
+            <ul>
+                <li>This is an informational alert for awareness and trending</li>
+                <li>No immediate action required</li>
+                <li>Will be included in daily/weekly reports</li>
+                <li>Helps establish baseline behavior</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>📈 Related Metrics</h2>
+            <p>Other metrics being monitored on this device:</p>
+            <ul>
+                {% for metric in alert.related_metrics %}
+                <li>{{ metric.name }}: {{ metric.value }} {{ metric.unit }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{{ dashboard_url }}/metrics/{{ alert.device_ip }}" class="button">View Device Metrics</a>
+            <a href="{{ dashboard_url }}/trends/{{ alert.metric_name }}" class="button">View Metric Trends</a>
+        </div>
+
+        <div class="footer">
+            <p>Alert ID: {{ alert.id }}</p>
+            <p>This is an automated monitoring update from the Network Monitoring System. Please do not reply to this email.</p>
+            <p>To update notification preferences, visit the <a href="{{ dashboard_url }}/settings">dashboard settings</a>.</p>
+        </div>
+    </div>
+</body>
+</html>

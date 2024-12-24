@@ -1,0 +1,222 @@
+{
+    "general": {
+        "polling_interval": 300,
+        "retention_days": 30,
+        "log_level": "INFO",
+        "dashboard_url": "http://localhost:8080"
+    },
+    "devices": {
+        "enable_discovery": true,
+        "discovery_interval": 3600,
+        "discovery_networks": [
+            "192.168.1.0/24",
+            "10.0.0.0/24"
+        ],
+        "static_devices": [
+            {
+                "ip": "192.168.1.1",
+                "hostname": "core-router",
+                "type": "router",
+                "vendor": "cisco",
+                "model": "ISR4321",
+                "credentials_group": "cisco_devices",
+                "location": "Main Office"
+            },
+            {
+                "ip": "192.168.1.2",
+                "hostname": "core-switch",
+                "type": "switch",
+                "vendor": "cisco",
+                "model": "C9300-48P",
+                "credentials_group": "cisco_devices",
+                "location": "Main Office"
+            }
+        ],
+        "credentials": {
+            "cisco_devices": {
+                "username": "admin",
+                "password": "{{ CISCO_PASSWORD }}",
+                "enable_password": "{{ CISCO_ENABLE }}",
+                "snmp_community": "{{ SNMP_COMMUNITY }}",
+                "snmp_version": "v2c"
+            },
+            "juniper_devices": {
+                "username": "admin",
+                "password": "{{ JUNIPER_PASSWORD }}",
+                "ssh_key_file": "/path/to/ssh/key"
+            },
+            "default": {
+                "username": "admin",
+                "password": "{{ DEFAULT_PASSWORD }}",
+                "snmp_community": "public",
+                "snmp_version": "v2c"
+            }
+        }
+    },
+    "metrics": {
+        "collection_interval": 300,
+        "batch_size": 100,
+        "thresholds": {
+            "network_performance": {
+                "bandwidth_utilization": {
+                    "warning": 70,
+                    "critical": 85,
+                    "unit": "percent"
+                },
+                "packet_loss": {
+                    "warning": 1,
+                    "critical": 5,
+                    "unit": "percent"
+                },
+                "latency": {
+                    "warning": 100,
+                    "critical": 200,
+                    "unit": "ms"
+                },
+                "interface_errors": {
+                    "warning": 100,
+                    "critical": 1000,
+                    "unit": "count"
+                }
+            },
+            "security": {
+                "auth_failures": {
+                    "warning": 5,
+                    "critical": 10,
+                    "unit": "count",
+                    "window": 300
+                },
+                "acl_violations": {
+                    "warning": 10,
+                    "critical": 50,
+                    "unit": "count",
+                    "window": 300
+                },
+                "port_security_violations": {
+                    "warning": 1,
+                    "critical": 5,
+                    "unit": "count",
+                    "window": 300
+                }
+            },
+            "physical": {
+                "temperature": {
+                    "warning": 75,
+                    "critical": 85,
+                    "unit": "celsius"
+                },
+                "fan_status": {
+                    "warning": "degraded",
+                    "critical": "failed",
+                    "unit": "status"
+                },
+                "poe_usage": {
+                    "warning": 80,
+                    "critical": 90,
+                    "unit": "percent"
+                }
+            },
+            "services": {
+                "dns_response_time": {
+                    "warning": 100,
+                    "critical": 200,
+                    "unit": "ms"
+                },
+                "dhcp_lease_utilization": {
+                    "warning": 80,
+                    "critical": 90,
+                    "unit": "percent"
+                }
+            }
+        }
+    },
+    "alerting": {
+        "correlation_window": 3600,
+        "deduplication_window": 300,
+        "notifications": {
+            "slack_enabled": true,
+            "slack_webhook_url": "{{ SLACK_WEBHOOK_URL }}",
+            "email_enabled": true,
+            "smtp": {
+                "server": "smtp.company.com",
+                "port": 587,
+                "use_tls": true,
+                "username": "alerts@company.com",
+                "password": "{{ SMTP_PASSWORD }}",
+                "from_address": "network-monitoring@company.com"
+            },
+            "severity_contacts": {
+                "critical": [
+                    "network-oncall@company.com",
+                    "it-manager@company.com"
+                ],
+                "warning": [
+                    "network-team@company.com"
+                ],
+                "info": [
+                    "network-monitoring@company.com"
+                ]
+            }
+        },
+        "escalation_paths": {
+            "critical": [
+                "Network Operations",
+                "Network Engineering",
+                "IT Management",
+                "CTO Office"
+            ],
+            "warning": [
+                "Network Operations",
+                "Network Engineering"
+            ]
+        },
+        "business_services": [
+            {
+                "name": "Core Network",
+                "description": "Primary network infrastructure",
+                "priority": 1,
+                "dependencies": [
+                    "192.168.1.1",
+                    "192.168.1.2"
+                ],
+                "contacts": [
+                    "network-team@company.com",
+                    "it-manager@company.com"
+                ]
+            },
+            {
+                "name": "Internet Access",
+                "description": "External connectivity",
+                "priority": 1,
+                "dependencies": [
+                    "192.168.1.1"
+                ],
+                "contacts": [
+                    "network-team@company.com"
+                ]
+            }
+        ]
+    },
+    "topology": {
+        "update_interval": 3600,
+        "discovery_protocols": [
+            "lldp",
+            "cdp"
+        ],
+        "max_hops": 10,
+        "excluded_networks": [
+            "192.168.100.0/24"
+        ]
+    },
+    "reporting": {
+        "daily_report_time": "00:00",
+        "weekly_report_day": "Monday",
+        "weekly_report_time": "01:00",
+        "monthly_report_day": 1,
+        "monthly_report_time": "02:00",
+        "report_recipients": [
+            "network-team@company.com",
+            "it-reports@company.com"
+        ]
+    }
+}

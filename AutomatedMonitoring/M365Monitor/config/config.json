@@ -1,0 +1,63 @@
+{
+    "general": {
+        "environment": "production",
+        "logLevel": "info",
+        "timezone": "UTC",
+        "retryAttempts": 3,
+        "retryDelay": 5
+    },
+    "slack": {
+        "webhookUrl": "",
+        "defaultChannel": "m365-alerts",
+        "channels": {
+            "critical": "m365-critical",
+            "high": "m365-high",
+            "medium": "m365-medium",
+            "low": "m365-low"
+        },
+        "mentionRoles": {
+            "critical": ["@m365-oncall"],
+            "high": ["@m365-support"],
+            "medium": [],
+            "low": []
+        }
+    },
+    "monitoring": {
+        "intervals": {
+            "exchangeOnline": 300,
+            "sharePoint": 300,
+            "teams": 300,
+            "oneDrive": 300,
+            "tenantWide": 600
+        },
+        "thresholds": {
+            "mailQueueSize": 1000,
+            "storageWarning": 85,
+            "storageCritical": 95,
+            "apiThrottling": 80,
+            "performanceLatency": 5000
+        }
+    },
+    "authentication": {
+        "clientId": "",
+        "tenantId": "",
+        "certificateThumbprint": "",
+        "requiredRoles": [
+            "Exchange.ManageAsApp",
+            "SharePoint.Read.All",
+            "Team.ReadBasic.All",
+            "Directory.Read.All",
+            "AuditLog.Read.All"
+        ]
+    },
+    "alerting": {
+        "suppressionPeriod": 3600,
+        "correlationWindow": 900,
+        "maxAlertsPerHour": 50,
+        "businessHours": {
+            "start": "09:00",
+            "end": "17:00",
+            "timezone": "UTC"
+        }
+    }
+}

@@ -1,0 +1,130 @@
+{
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "⚠️ WARNING ALERT - Investigation Needed",
+        "emoji": true
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*Device:*\n{{ alert.device_name }} ({{ alert.device_ip }})"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Metric:*\n{{ alert.metric_name }}"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*Current Value:*\n{{ alert.metric_value }}"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Warning Threshold:*\n{{ alert.threshold }}"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Description:*\n{{ alert.description }}"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*🏢 Potential Impact:*"
+      }
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*Affected Services:*\n{% for service in alert.affected_services %}• {{ service.name }} (Priority: {{ service.priority }})\n{% endfor %}"
+        }
+      ]
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*🔍 Investigation Steps:*"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "{% for step in alert.resolution_steps %}{{ loop.index }}. {{ step }}\n{% endfor %}"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*📈 Historical Context:*\n{% if alert.previous_occurrences %}Last occurred: {{ alert.previous_occurrences | last | datetime }}{% else %}No previous occurrences{% endif %}"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "Alert ID: {{ alert.id }} | Generated: {{ alert.timestamp | datetime }}"
+        }
+      ]
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Acknowledge",
+            "emoji": true
+          },
+          "style": "primary",
+          "value": "acknowledge_{{ alert.id }}"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "View Details",
+            "emoji": true
+          },
+          "value": "details_{{ alert.id }}"
+        }
+      ]
+    }
+  ]
+}
