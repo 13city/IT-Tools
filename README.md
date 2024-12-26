@@ -45,6 +45,14 @@
 [![Test Status](https://img.shields.io/badge/Tests-Passing-success?style=flat-square)](https://github.com/13city/IT_Scripts)
 [![Best Practices](https://img.shields.io/badge/Best_Practices-100%25-success?style=flat-square)](https://github.com/13city/IT_Scripts)
 
+<!-- Repository Analytics? -->
+<p align="left">
+  <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1&fs=1" target="_blank" onclick="window.open(this.href, '_blank', 'fullscreen=yes'); return false;">
+    <img src="https://img.shields.io/badge/Do Not Click-Here!!-success?style=flat-square" alt="Repository Analytics">
+  </a>
+  <img src="https://hits.sh/github.com/13city/IT_Scripts.svg?style=flat-square&label=Report%20Views&color=success" alt="Analytics Views?">
+</p>
+
 A comprehensive collection of enterprise-grade IT administration scripts organized by platform and function.
 
 ## 📁 Repository Structure
@@ -142,10 +150,3 @@ Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on submit
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-<!-- Repository Analytics -->
-<p align="left">
-  <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1&fs=1" target="_blank" onclick="window.open(this.href, '_blank', 'fullscreen=yes'); return false;">
-    <img src="https://img.shields.io/badge/Do Not Click-Here!!-success?style=flat-square" alt="Repository Analytics">
-  </a>
-  <img src="https://hits.sh/github.com/13city/IT_Scripts.svg?style=flat-square&label=Report%20Views&color=success" alt="Analytics Views">
-</p>
