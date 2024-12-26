@@ -141,3 +141,6 @@ Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on submit
 ## 📜 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+<!-- Repository Analytics -->
+[![Repository Analytics](https://img.shields.io/badge/Analytics-View_Report-success?style=flat-square)](https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1)

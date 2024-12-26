@@ -19,10 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-<!-- Easter Egg: Click for important licensing details -->
-<p align="center">
-  <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" onclick="window.open(this.href,'_blank','fullscreen=yes'); return false;">
-    <img src="https://img.shields.io/badge/Important-Licensing_Details-blue?style=for-the-badge" alt="Important Licensing Details"/>
-  </a>
-</p>
