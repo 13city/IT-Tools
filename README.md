@@ -15,35 +15,35 @@
 ![Microsoft](https://img.shields.io/badge/Microsoft-0078D4?style=for-the-badge&logo=microsoft&logoColor=white)
 
 <!-- Enterprise Features -->
-[![Enterprise Ready](https://img.shields.io/badge/Enterprise-Ready-blue?style=for-the-badge)](https://github.com/13city/IT_Scripts)
-[![Automation](https://img.shields.io/badge/Automation-Enabled-success?style=for-the-badge)](https://github.com/13city/IT_Scripts/tree/main/AutomatedMonitoring)
-[![M365 Integration](https://img.shields.io/badge/M365-Integration-purple?style=for-the-badge)](https://github.com/13city/IT_Scripts/tree/main/M365_Troubleshooting_Guides)
+![Enterprise Ready](https://img.shields.io/badge/Enterprise-Ready-blue?style=for-the-badge)
+![Automation](https://img.shields.io/badge/Automation-Enabled-success?style=for-the-badge)
+![M365 Integration](https://img.shields.io/badge/M365-Integration-purple?style=for-the-badge)
 
 <!-- Security & Compliance -->
-[![Security: Enterprise Grade](https://img.shields.io/badge/Security-Enterprise%20Grade-2ea44f?style=for-the-badge)](https://github.com/13city/IT_Scripts)
-[![Compliance](https://img.shields.io/badge/Compliance-Ready-brightgreen?style=for-the-badge)](https://github.com/13city/IT_Scripts)
+![Security: Enterprise Grade](https://img.shields.io/badge/Security-Enterprise%20Grade-2ea44f?style=for-the-badge)
+![Compliance](https://img.shields.io/badge/Compliance-Ready-brightgreen?style=for-the-badge)
 
 <!-- Documentation Quality -->
-[![Documentation](https://img.shields.io/badge/Documentation-Comprehensive-blue?style=for-the-badge)](https://github.com/13city/IT_Scripts)
-[![Best Practices](https://img.shields.io/badge/Best_Practices-Implemented-success?style=for-the-badge)](https://github.com/13city/IT_Scripts)
+![Documentation](https://img.shields.io/badge/Documentation-Comprehensive-blue?style=for-the-badge)
+![Best Practices](https://img.shields.io/badge/Best_Practices-Implemented-success?style=for-the-badge)
 
 <!-- Script Categories -->
-[![Windows Scripts](https://img.shields.io/badge/Windows_Scripts-40+-informational)](https://github.com/13city/IT_Scripts/tree/main/Windows)
-[![Linux Scripts](https://img.shields.io/badge/Linux_Scripts-15+-informational)](https://github.com/13city/IT_Scripts/tree/main/Linux)
-[![Monitoring Tools](https://img.shields.io/badge/Monitoring_Tools-Advanced-informational)](https://github.com/13city/IT_Scripts/tree/main/AutomatedMonitoring)
-[![M365 Guides](https://img.shields.io/badge/M365_Guides-L1_L2_L3-informational)](https://github.com/13city/IT_Scripts/tree/main/M365_Troubleshooting_Guides)
+![Windows Scripts](https://img.shields.io/badge/Windows_Scripts-40+-informational)
+![Linux Scripts](https://img.shields.io/badge/Linux_Scripts-15+-informational)
+![Monitoring Tools](https://img.shields.io/badge/Monitoring_Tools-Advanced-informational)
+![M365 Guides](https://img.shields.io/badge/M365_Guides-L1_L2_L3-informational)
 
 <!-- Enterprise Solutions -->
-[![Active Directory](https://img.shields.io/badge/Active_Directory-Managed-orange)](https://github.com/13city/IT_Scripts/tree/main/Windows)
-[![SQL Management](https://img.shields.io/badge/SQL-Management-orange)](https://github.com/13city/IT_Scripts/tree/main/Windows)
-[![Network Monitoring](https://img.shields.io/badge/Network-Monitoring-orange)](https://github.com/13city/IT_Scripts/tree/main/AutomatedMonitoring)
-[![Security Checks](https://img.shields.io/badge/Security-Checks-orange)](https://github.com/13city/IT_Scripts/tree/main/Windows)
-[![Cloud Integration](https://img.shields.io/badge/Cloud-Integration-orange)](https://github.com/13city/IT_Scripts)
+![Active Directory](https://img.shields.io/badge/Active_Directory-Managed-orange)
+![SQL Management](https://img.shields.io/badge/SQL-Management-orange)
+![Network Monitoring](https://img.shields.io/badge/Network-Monitoring-orange)
+![Security Checks](https://img.shields.io/badge/Security-Checks-orange)
+![Cloud Integration](https://img.shields.io/badge/Cloud-Integration-orange)
 
 <!-- Enterprise Metrics -->
-[![Code Coverage](https://img.shields.io/badge/Code_Coverage-95%25-success?style=flat-square)](https://github.com/13city/IT_Scripts)
-[![Test Status](https://img.shields.io/badge/Tests-Passing-success?style=flat-square)](https://github.com/13city/IT_Scripts)
-[![Best Practices](https://img.shields.io/badge/Best_Practices-100%25-success?style=flat-square)](https://github.com/13city/IT_Scripts)
+![Code Coverage](https://img.shields.io/badge/Code_Coverage-95%25-success?style=flat-square)
+![Test Status](https://img.shields.io/badge/Tests-Passing-success?style=flat-square)
+![Best Practices](https://img.shields.io/badge/Best_Practices-100%25-success?style=flat-square)
 
 <!-- Repository Analytics? -->
 <p align="left">
