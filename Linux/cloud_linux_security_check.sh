@@ -1,15 +1,25 @@
 #!/usr/bin/env bash
-#
-# cloud_linux_security_check.sh
-#
-# SYNOPSIS
+# .SYNOPSIS
 #   Checks cloud Linux VM security configurations often relevant in AWS, Azure, or GCP.
 #
-# DESCRIPTION
-#   - Looks for presence of cloud-init or relevant cloud agent.
-#   - Verifies SSH key-based login is preferred over password.
-#   - Checks for disk encryption or checks if ephemeral storage is handled properly.
-#   - Logs findings to /var/log/cloud_linux_security_check.log
+# .DESCRIPTION
+#   This script:
+#   - Looks for presence of cloud-init or relevant cloud agent
+#   - Verifies SSH key-based login is preferred over password
+#   - Checks for disk encryption or checks if ephemeral storage is handled properly
+#   - Logs findings to specified log file
+#
+# .NOTES
+#   Author: 13city
+#   Compatible with: Ubuntu 18.04+, RHEL/CentOS 7+, Debian 10+
+#
+# .PARAMETER LOGFILE
+#   Path where security check results will be written
+#   Default: /var/log/cloud_linux_security_check.log
+#
+# .EXAMPLE
+#   ./cloud_linux_security_check.sh
+#   Performs security checks with default logging location
 #
 
 LOGFILE="/var/log/cloud_linux_security_check.log"

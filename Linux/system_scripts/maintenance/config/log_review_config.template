@@ -1,0 +1,53 @@
+# Configuration template for log_review.sh
+# Copy this file to log_review_config and modify with your settings
+
+# Notification settings
+# Create a webhook URL in your Slack workspace settings
+export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+
+# Email recipient for notifications
+# Use a comma-separated list for multiple recipients
+export EMAIL_RECIPIENT="admin@example.com"
+
+# Common log files to monitor
+# Uncomment and modify as needed
+#SYSLOG="/var/log/syslog"
+#AUTHLOG="/var/log/auth.log"
+#MESSAGES="/var/log/messages"
+#APACHE_ERROR="/var/log/apache2/error.log"
+#MYSQL_ERROR="/var/log/mysql/error.log"
+
+# Common patterns to search for
+# Format: PATTERN_NAME="regex_pattern"
+# Uncomment and modify as needed
+
+# System patterns
+#PATTERN_OOM="out of memory|oom killer"
+#PATTERN_DISK="disk full|no space left"
+#PATTERN_CPU="load average.*[5-9][0-9]"
+
+# Security patterns
+#PATTERN_AUTH="Failed password|Invalid user|authentication failure"
+#PATTERN_SUDO="sudo:.*(COMMAND|NOT in sudoers)"
+#PATTERN_SSH="sshd.*Failed|Bad protocol"
+
+# Application patterns
+#PATTERN_PHP="PHP (Fatal|Parse|Warning)"
+#PATTERN_MYSQL="MySQL.*error"
+#PATTERN_APACHE="Apache.*error"
+
+# Custom severity levels
+# Used for notification urgency
+#CRITICAL="kernel|panic|emergency|fatal"
+#WARNING="warning|failed|error"
+#INFO="notice|info"
+
+# Results directory settings
+# Default: ../logs/reviews
+#RESULTS_DIR="../logs/reviews"
+
+# Log retention (in days)
+# Default: 30 days
+#LOG_RETENTION=30
+
+# Additional configuration options can be added here

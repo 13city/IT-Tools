@@ -3,9 +3,37 @@
   Aggregates and parses firewall logs for security events or blocked traffic.
 
 .DESCRIPTION
-  - Collects logs from a specified directory (e.g., syslog server).
-  - Searches for blocked traffic or intrusion events.
-  - Outputs summarized CSV for easy review.
+  This script:
+  - Collects firewall logs from a specified network directory
+  - Parses logs for security-relevant events including:
+    * Blocked traffic attempts
+    * Potential intrusion events
+    * Access denials
+  - Aggregates findings into a structured CSV report
+  - Provides detailed logging of the aggregation process
+  - Handles large log files efficiently
+  - Supports recursive directory scanning
+
+.NOTES
+  Author: 13city
+  Compatible with: Windows Server 2012 R2+, Windows 10/11
+  Requirements: Network access to syslog server, Write access to output directory
+
+.PARAMETER LogDirectory
+  Network path to directory containing firewall logs
+  Default: \\SyslogServer\Logs\SonicWALL
+
+.PARAMETER OutputCsv
+  Path where the aggregated CSV report will be saved
+  Default: C:\Logs\FirewallLogsSummary.csv
+
+.EXAMPLE
+  .\FirewallLogAggregation.ps1
+  Processes logs from default directory
+
+.EXAMPLE
+  .\FirewallLogAggregation.ps1 -LogDirectory "\\Server\Logs\Firewall" -OutputCsv "D:\Reports\Firewall.csv"
+  Processes logs from custom directory with custom output location
 #>
 
 param(

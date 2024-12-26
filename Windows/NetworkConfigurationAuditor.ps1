@@ -1,19 +1,73 @@
 #Requires -Version 5.1
 #Requires -Modules Posh-SSH
 
-<#
+<# 
 .SYNOPSIS
-    Audits Cisco network device configurations against best practices.
+    Advanced Cisco network device configuration auditing and compliance system.
+
 .DESCRIPTION
-    This script connects to Cisco network devices via SSH to gather interface statuses,
-    VLAN assignments, and routing tables, then compares them against best practices
-    templates to identify discrepancies.
+    This script provides comprehensive network device configuration analysis:
+    - Connects to Cisco devices via secure SSH
+    - Audits interface configurations and statuses
+    - Validates VLAN assignments and trunking
+    - Analyzes routing table configurations
+    - Compares against best practices templates
+    - Identifies security vulnerabilities
+    - Generates detailed audit reports
+    - Validates ACL configurations
+    - Ensures compliance standards
+    - Provides remediation recommendations
+
+.NOTES
+    Author: 13city
+    Compatible with: Windows Server 2016-2022, Windows 10/11
+    Requirements:
+    - PowerShell 5.1 or higher
+    - Posh-SSH module installed
+    - Network connectivity to devices
+    - Valid device credentials
+    - Write access to script directory
+    - CSV and JSON parsing capabilities
+
 .PARAMETER DeviceList
-    Path to CSV file containing device information (IP, Type, Credentials)
+    Path to CSV file with device information
+    Required: Yes
+    Format: CSV with headers (IPAddress,Username,Password,Type)
+    Example: "C:\Scripts\devices.csv"
+    Must contain valid device credentials
+
 .PARAMETER TemplateFile
-    Path to JSON file containing best practices templates
+    Path to JSON best practices template
+    Required: Yes
+    Format: JSON configuration template
+    Example: "C:\Scripts\best_practices.json"
+    Defines configuration standards
+
 .EXAMPLE
     .\NetworkConfigurationAuditor.ps1 -DeviceList "devices.csv" -TemplateFile "best_practices.json"
+    Basic audit execution:
+    - Processes all devices in CSV
+    - Uses specified template
+    - Generates standard reports
+    - Default compliance checks
+
+.EXAMPLE
+    .\NetworkConfigurationAuditor.ps1 -DeviceList "C:\Network\core_switches.csv" -TemplateFile "C:\Templates\core_template.json"
+    Custom configuration audit:
+    - Specific device list
+    - Custom template file
+    - Full compliance checking
+    - Detailed reporting
+
+.EXAMPLE
+    $devices = ".\production_devices.csv"
+    $template = ".\enterprise_standards.json"
+    .\NetworkConfigurationAuditor.ps1 -DeviceList $devices -TemplateFile $template
+    Production environment audit:
+    - Uses production device list
+    - Enterprise standards template
+    - Comprehensive analysis
+    - Security validation
 #>
 
 [CmdletBinding()]

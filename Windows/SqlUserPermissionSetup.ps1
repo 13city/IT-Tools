@@ -1,11 +1,91 @@
 <#
 .SYNOPSIS
-    Creates SQL Logins, DB Users, and assigns permissions in a newly created database.
+    SQL Server user and permission management automation toolkit.
 
 .DESCRIPTION
-    - Connects to a SQL instance.
-    - Checks if login exists, creates if missing.
-    - Creates corresponding DB user and assigns roles (db_owner, etc.).
+    This script provides comprehensive SQL Server user management capabilities:
+    - Login Management:
+      * SQL Login creation
+      * Password policy configuration
+      * Login validation
+      * Security checks
+    - User Management:
+      * Database user creation
+      * User-login mapping
+      * Schema assignment
+      * User validation
+    - Permission Control:
+      * Role assignment
+      * Permission verification
+      * Role membership management
+      * Security auditing
+    - Security Features:
+      * Password policy enforcement
+      * Default schema configuration
+      * Role-based access control
+      * Permission validation
+
+.NOTES
+    Author: 13city
+    Compatible with:
+    - SQL Server 2012+
+    - SQL Server 2014+
+    - SQL Server 2016+
+    - SQL Server 2017+
+    - SQL Server 2019+
+    
+    Requirements:
+    - PowerShell 5.1 or higher
+    - SqlServer PowerShell module
+    - Sysadmin or security admin rights
+    - Database access permissions
+    - Server login creation rights
+
+.PARAMETER SqlInstance
+    SQL Server instance name
+    Required parameter
+    Format: ServerName\InstanceName
+    Example: SQLSERVER01\PROD
+
+.PARAMETER DatabaseName
+    Target database name
+    Required parameter
+    Must be valid SQL identifier
+    Case-sensitive
+
+.PARAMETER SqlLogin
+    SQL Server login name
+    Required parameter
+    Must be unique on server
+    Case-sensitive
+
+.PARAMETER SqlPassword
+    Password for SQL authentication
+    Required parameter
+    Must meet complexity requirements
+    Stored securely
+
+.PARAMETER DbRole
+    Database role to assign
+    Optional parameter
+    Default: db_owner
+    Common values: db_datareader, db_datawriter
+
+.EXAMPLE
+    .\SqlUserPermissionSetup.ps1 -SqlInstance "SQLSERVER01" -DatabaseName "CustomerDB" -SqlLogin "AppUser" -SqlPassword "SecurePass123"
+    Basic user setup:
+    - Creates SQL login
+    - Creates database user
+    - Assigns db_owner role
+    - Default settings
+
+.EXAMPLE
+    .\SqlUserPermissionSetup.ps1 -SqlInstance "SQLSERVER01\PROD" -DatabaseName "FinanceDB" -SqlLogin "ReadOnlyUser" -SqlPassword "SecurePass123" -DbRole "db_datareader"
+    Read-only user setup:
+    - Creates SQL login
+    - Creates database user
+    - Assigns read-only role
+    - Restricted access
 #>
 
 param(

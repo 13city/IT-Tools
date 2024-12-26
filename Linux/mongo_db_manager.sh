@@ -1,9 +1,41 @@
 #!/usr/bin/env bash
+# 
+# .SYNOPSIS
+#   MongoDB database creation and management utility.
 #
-# mongo_db_manager.sh
+# .DESCRIPTION
+#   This script:
+#   - Creates new MongoDB databases or rebuilds existing ones
+#   - Supports optional database initialization via JavaScript files
+#   - Provides options for complete database rebuilds
+#   - Executes custom MongoDB scripts (.js/.mongo) in sequence
+#   - Maintains detailed operation logs
 #
-# SYNOPSIS
-#   Creates or rebuilds a MongoDB database on a Linux host. Optionally runs .js scripts.
+# .NOTES
+#   Author: 13city
+#   Compatible with: Ubuntu 18.04+, RHEL/CentOS 7+, Debian 10+
+#   Requirements: MongoDB server, mongosh client
+#
+# .PARAMETER MONGO_HOST
+#   MongoDB server hostname or IP address
+#
+# .PARAMETER DB_NAME
+#   Name of the database to create/rebuild
+#
+# .PARAMETER REBUILD
+#   Whether to drop and recreate the database
+#   Values: true|false
+#
+# .PARAMETER SCRIPT_FOLDER
+#   Optional path to folder containing .js/.mongo initialization scripts
+#
+# .EXAMPLE
+#   ./mongo_db_manager.sh localhost mydb false
+#   Creates new database without rebuilding
+#
+# .EXAMPLE
+#   ./mongo_db_manager.sh localhost mydb true /path/to/scripts
+#   Rebuilds database and runs initialization scripts
 #
 
 MONGO_HOST="$1"

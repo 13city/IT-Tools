@@ -3,21 +3,51 @@
     Enhanced Windows Event Log analyzer with pattern detection and comprehensive reporting.
 
 .DESCRIPTION
-    Analyzes Windows Event Logs across multiple sources with configurable time ranges,
-    pattern detection, and severity-based filtering. Generates detailed HTML reports
-    with actionable insights.
+    This script:
+    - Analyzes Windows Event Logs across multiple sources
+    - Detects critical event patterns and correlations
+    - Filters events by configurable time ranges
+    - Provides severity-based event filtering
+    - Generates detailed HTML reports with insights
+    - Supports multiple log sources (System, Application, Security, etc.)
+    - Identifies common issue patterns (Service failures, crashes, etc.)
+    - Provides actionable summaries and recommendations
+
+.NOTES
+    Author: 13city
+    Compatible with: Windows Server 2012 R2, 2016, 2019, 2022, Windows 10/11
+    Requirements:
+    - Administrative privileges
+    - Access to Windows Event Logs
+    - Sufficient disk space for logs and reports
 
 .PARAMETER LogPath
     Path where logs and reports will be stored
+    Default: C:\Logs\EventAnalysis
 
 .PARAMETER TimeRange
-    Number of hours to look back for events (default: 24)
+    Number of hours to look back for events
+    Default: 24
 
 .PARAMETER SeverityLevel
     Minimum severity level to include (1-Critical, 2-Error, 3-Warning)
+    Default: 2 (Error)
 
 .PARAMETER GenerateHTML
     Switch to generate HTML report
+    Default: $true
+
+.EXAMPLE
+    .\EventLogAnalysis.ps1
+    Analyzes last 24 hours of events with default settings
+
+.EXAMPLE
+    .\EventLogAnalysis.ps1 -TimeRange 48 -SeverityLevel 1
+    Analyzes last 48 hours of events, critical events only
+
+.EXAMPLE
+    .\EventLogAnalysis.ps1 -LogPath "D:\CustomLogs" -GenerateHTML:$false
+    Analyzes events and stores logs in custom location without HTML report
 #>
 
 param (

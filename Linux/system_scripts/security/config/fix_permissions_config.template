@@ -1,0 +1,25 @@
+# Configuration template for fix_permissions.sh
+# Copy this file to fix_permissions_config and modify with your settings
+
+# Slack Webhook URL for notifications
+# Create a webhook URL in your Slack workspace settings
+export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+
+# Email recipient for notifications
+# Use a comma-separated list for multiple recipients
+export EMAIL_RECIPIENT="admin@example.com"
+
+# Default permissions (octal notation)
+# Uncomment and modify to override script defaults
+#DEFAULT_PERMS="750"
+
+# Default owner and group
+# Uncomment and modify to override script defaults
+#DEFAULT_OWNER="www-data"
+#DEFAULT_GROUP="www-data"
+
+# Log directory path (relative to script location)
+# Default: ../logs
+#LOG_DIR="../logs"
+
+# Additional configuration options can be added here

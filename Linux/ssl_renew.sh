@@ -1,10 +1,30 @@
 #!/usr/bin/env bash
+# 
+# .SYNOPSIS
+#   Automates SSL/TLS certificate renewal for domains.
 #
-# ssl_renew.sh
+# .DESCRIPTION
+#   This script:
+#   - Supports both self-signed and Let's Encrypt certificates
+#   - Generates new self-signed certificates with custom parameters
+#   - Automates Let's Encrypt certificate renewal using certbot
+#   - Creates necessary directory structure
+#   - Provides detailed logging of all operations
 #
-# SYNOPSIS
-#   Automates renewal of a self-signed certificate OR
-#   updates Let’s Encrypt cert using certbot.
+# .NOTES
+#   Author: 13city
+#   Compatible with: Ubuntu 18.04+, RHEL/CentOS 7+, Debian 10+
+#   Requirements: openssl, certbot (for Let's Encrypt mode)
+#
+# .PARAMETER MODE
+#   Certificate type to generate: 'selfsigned' or 'letsencrypt'
+#
+# .PARAMETER DOMAIN
+#   Domain name for the certificate (e.g., example.com)
+#
+# .EXAMPLE
+#   ./ssl_renew.sh selfsigned myinternaldomain.local
+#   ./ssl_renew.sh letsencrypt example.com
 #
 
 MODE="$1"        # "selfsigned" or "letsencrypt"

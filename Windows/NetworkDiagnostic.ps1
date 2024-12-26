@@ -1,10 +1,83 @@
 <# 
 .SYNOPSIS
-  Automated network diagnostic for Cisco or SonicWALL devices using SSH.
+    Advanced network device diagnostics and troubleshooting system.
 
 .DESCRIPTION
-  - Uses Plink (PuTTY command-line) to run commands.
-  - Captures outputs for analysis.
+    This script provides comprehensive network device diagnostics:
+    - Establishes secure SSH connections to devices
+    - Executes device-specific diagnostic commands
+    - Captures detailed command outputs
+    - Supports multiple device vendors
+    - Performs configuration validation
+    - Generates detailed diagnostic logs
+    - Analyzes device status
+    - Validates network connectivity
+    - Monitors device health
+    - Provides troubleshooting insights
+
+.NOTES
+    Author: 13city
+    Compatible with: Windows Server 2016-2022, Windows 10/11
+    Requirements:
+    - Plink.exe installed in C:\Tools
+    - Network connectivity to devices
+    - Valid device credentials
+    - Write access to C:\Logs
+    - PowerShell 5.1 or higher
+    - Administrative privileges
+
+.PARAMETER DeviceType
+    Network device vendor/type
+    Required: No
+    Default: "Cisco"
+    Options: "Cisco", "SonicWALL"
+    Determines command set used
+
+.PARAMETER Host
+    Target device address
+    Required: No
+    Default: "192.168.1.1"
+    Format: IP address or hostname
+    Must be network accessible
+
+.PARAMETER Username
+    Device login username
+    Required: No
+    Default: "UserName"
+    Must have sufficient privileges
+    Case-sensitive
+
+.PARAMETER Password
+    Device login password
+    Required: No
+    Default: "YourPassWord"
+    Case-sensitive
+    Stored securely during execution
+
+.EXAMPLE
+    .\NetworkDiagnostic.ps1 -DeviceType "Cisco" -Host "192.168.1.1" -Username "admin" -Password "SecurePass123"
+    Basic Cisco diagnostics:
+    - Connects to Cisco device
+    - Runs standard diagnostics
+    - Generates detailed logs
+    - Standard command set
+
+.EXAMPLE
+    .\NetworkDiagnostic.ps1 -DeviceType "SonicWALL" -Host "10.0.0.1" -Username "admin" -Password "Pass123!" 
+    SonicWALL diagnostics:
+    - Connects to SonicWALL device
+    - Executes SonicOS commands
+    - Captures device status
+    - Vendor-specific analysis
+
+.EXAMPLE
+    $creds = Get-Credential
+    .\NetworkDiagnostic.ps1 -DeviceType "Cisco" -Host "core-switch.local" -Username $creds.Username -Password $creds.GetNetworkCredential().Password
+    Secure credential handling:
+    - Uses credential object
+    - Enhanced security
+    - Full diagnostics
+    - Detailed logging
 #>
 
 param(

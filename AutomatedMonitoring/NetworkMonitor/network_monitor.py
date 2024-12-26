@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+"""
+Network Monitoring System
+Author: 13city
+
+A comprehensive network monitoring system that tracks device health,
+performance metrics, and security events.
+"""
 
 import os
 import sys

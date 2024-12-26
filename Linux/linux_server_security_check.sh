@@ -1,15 +1,34 @@
 #!/usr/bin/env bash
+# 
+# .SYNOPSIS
+
+#   Security misconfiguration checker for Linux servers.
 #
-# linux_server_security_check.sh
+# .DESCRIPTION
+#   This script:
+#   - Performs comprehensive security audit of Linux server configurations
+#   - Checks firewall status and basic rule configuration
+#   - Verifies SSH daemon security settings
+#   - Validates presence of critical security packages
+#   - Checks for pending security updates
+#   - Provides detailed logging of all findings
 #
-# SYNOPSIS
-#   Security misconfiguration checker for general Linux servers (Ubuntu, Debian, RHEL, CentOS).
+# .NOTES
+#   Author: 13city
+#   Compatible with: Ubuntu 18.04+, RHEL/CentOS 7+, Debian 10+
+#   Requirements: Root/sudo access, common Linux utilities
 #
-# DESCRIPTION
-#   - Checks if firewall (ufw or firewalld) is running and has basic rules.
-#   - Verifies SSH settings (root login disabled, password auth disabled if desired).
-#   - Ensures critical security packages are installed (fail2ban, etc.).
-#   - Logs findings to /var/log/linux_server_security_check.log
+# .PARAMETER LOGFILE
+#   Path where security check results will be written
+#   Default: /var/log/linux_server_security_check.log
+#
+# .EXAMPLE
+#   ./linux_server_security_check.sh
+#   Performs security check and logs to default location
+#
+# .EXAMPLE
+#   sudo ./linux_server_security_check.sh
+#   Run with elevated privileges for complete system access
 #
 
 LOGFILE="/var/log/linux_server_security_check.log"

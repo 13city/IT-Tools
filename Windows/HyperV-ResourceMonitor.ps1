@@ -4,47 +4,112 @@
 
 <#
 .SYNOPSIS
-    Comprehensive Hyper-V health monitoring script that checks for resource contention, snapshots, and infrastructure issues.
+    Advanced Hyper-V resource monitoring and health assessment system.
 
 .DESCRIPTION
-    This script connects to a Hyper-V host, enumerates all VMs, and performs comprehensive health checks including:
-    - CPU and memory usage monitoring
-    - Snapshot age and space usage analysis
-    - Storage health verification
-    - Network performance checks
-    - Resource contention detection
-    
-    It logs findings, suggests remediation steps, and can send email alerts for critical issues.
+    This script provides comprehensive resource monitoring and health assessment for Hyper-V environments:
+    - Real-time monitoring of CPU, memory, and network utilization
+    - Storage health analysis including fragmentation and space usage
+    - Snapshot management and age monitoring
+    - Network adapter performance tracking
+    - Resource contention detection and alerting
+    - Detailed remediation recommendations
+    - Email alerting for critical issues
+    - Comprehensive logging of all findings
+    - Support for remote host monitoring
+    - Performance threshold management
+    - Storage health verification including VHD analysis
+    - Bandwidth usage monitoring and QoS validation
+
+.NOTES
+    Author: 13city
+    Compatible with: Windows Server 2012 R2, 2016, 2019, 2022
+    Requirements:
+    - Hyper-V PowerShell module
+    - Administrative rights
+    - Write access to log directory
+    - PowerShell 5.1 or higher
+    - SMTP access (if email alerts enabled)
+    - Network connectivity to monitored host
+    - Sufficient permissions to query VM metrics
 
 .PARAMETER HostName
-    The Hyper-V host to monitor. Default is localhost.
+    The Hyper-V host to monitor
+    Required: No
+    Default: localhost
+    Example: "HyperV01"
+    Accepts remote server names for distributed monitoring
 
 .PARAMETER LogPath
-    Path where log files will be stored. Default is "C:\Logs\HyperV"
+    Directory path for storing monitoring logs
+    Required: No
+    Default: "C:\Logs\HyperV"
+    Must have write permissions
 
 .PARAMETER CpuThreshold
-    CPU usage threshold percentage that triggers alerts. Default is 90.
+    CPU usage percentage that triggers alerts
+    Required: No
+    Default: 90
+    Range: 1-100
+    Affects resource monitoring alerts
 
 .PARAMETER MemoryThreshold
-    Memory usage threshold percentage that triggers alerts. Default is 85.
+    Memory usage percentage that triggers alerts
+    Required: No
+    Default: 85
+    Range: 1-100
+    Affects resource monitoring alerts
 
 .PARAMETER SnapshotAgeThreshold
-    Maximum age in days for snapshots before triggering alerts. Default is 7.
+    Maximum age in days for snapshots before alerting
+    Required: No
+    Default: 7
+    Range: 1-365
+    Affects snapshot management alerts
 
 .PARAMETER EmailAlert
-    Switch to enable email alerts.
+    Switch to enable email alerting functionality
+    Required: No
+    Default: False
+    Requires valid SMTP configuration
 
 .PARAMETER SmtpServer
-    SMTP server for sending alerts.
+    SMTP server for sending alert emails
+    Required: Only if EmailAlert is enabled
+    Example: "smtp.company.com"
 
 .PARAMETER EmailFrom
-    Email address to send alerts from.
+    Sender email address for alerts
+    Required: Only if EmailAlert is enabled
+    Example: "hyperv@company.com"
 
 .PARAMETER EmailTo
-    Email address to send alerts to.
+    Recipient email address for alerts
+    Required: Only if EmailAlert is enabled
+    Example: "admin@company.com"
+
+.EXAMPLE
+    .\HyperV-ResourceMonitor.ps1
+    Basic execution with defaults:
+    - Monitors localhost
+    - Uses default thresholds
+    - Logs to default directory
+    - No email alerts
 
 .EXAMPLE
     .\HyperV-ResourceMonitor.ps1 -HostName "HyperV01" -EmailAlert -SmtpServer "smtp.company.com" -EmailFrom "hyperv@company.com" -EmailTo "admin@company.com"
+    Production monitoring:
+    - Monitors remote host
+    - Enables email alerts
+    - Uses specified SMTP configuration
+    - Full logging and alerting
+
+.EXAMPLE
+    .\HyperV-ResourceMonitor.ps1 -CpuThreshold 80 -MemoryThreshold 75 -SnapshotAgeThreshold 3
+    Custom thresholds:
+    - More aggressive monitoring
+    - Earlier warning system
+    - Stricter snapshot management
 #>
 
 [CmdletBinding()]

@@ -1,22 +1,69 @@
 <# 
 .SYNOPSIS
-  Cleans up temporary files, rotates logs, and checks disk space.
+    Comprehensive system maintenance and cleanup automation toolkit.
 
 .DESCRIPTION
-  This script:
-  - Removes old temporary files.
-  - Rotates Windows logs older than a certain age.
-  - Checks available disk space.
-  - Logs all actions to a central log file.
+    This script provides extensive system maintenance capabilities:
+    - Temporary File Management:
+      * System temp file cleanup
+      * User temp file removal
+      * Cache clearing
+      * Obsolete file detection
+    - Log Management:
+      * Log rotation
+      * Archive creation
+      * Size monitoring
+      * Retention policy enforcement
+    - Disk Space Management:
+      * Space utilization monitoring
+      * Low space alerts
+      * Drive analysis
+      * Cleanup recommendations
+    - System Maintenance:
+      * Performance optimization
+      * Resource monitoring
+      * Health checks
+      * Status reporting
 
 .NOTES
-  Compatible with: Windows Server 2012 R2, 2016, 2019, 2022, Windows 10/11
+    Author: 13city
+    Compatible with:
+    - Windows Server 2012 R2
+    - Windows Server 2016
+    - Windows Server 2019
+    - Windows Server 2022
+    - Windows 10/11
+    
+    Requirements:
+    - PowerShell 5.1 or higher
+    - Administrative privileges
+    - Write access to log directory
+    - System maintenance permissions
+    - WMI access rights
 
 .PARAMETER LogPath
-  Directory where the script writes its log.
+    Directory for script logging
+    Default: C:\Logs
+    Creates directory if missing
+    Requires write permissions
+    Stores timestamped log files
 
 .EXAMPLE
-  .\SystemCleanupAndMaintenance.ps1 -LogPath "C:\Logs"
+    .\SystemCleanupAndMaintenance.ps1
+    Basic maintenance:
+    - Uses default log path
+    - Cleans temp files
+    - Rotates logs
+    - Checks disk space
+    - Creates standard report
+
+.EXAMPLE
+    .\SystemCleanupAndMaintenance.ps1 -LogPath "D:\MaintenanceLogs"
+    Custom logging:
+    - Uses specified log directory
+    - Creates if not exists
+    - Maintains detailed logs
+    - Preserves execution history
 #>
 
 param (

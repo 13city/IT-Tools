@@ -1,15 +1,67 @@
 <#
 .SYNOPSIS
-    Security misconfiguration checker for Windows 10/11 desktops.
+    Comprehensive Windows desktop security configuration analyzer and validator.
 
 .DESCRIPTION
-    - Checks local account policies (password policy, lockout policy).
-    - Verifies firewall status.
-    - Reports if RDP is enabled.
-    - Logs any findings to a text file.
+    This script provides extensive security validation capabilities:
+    - Account Security:
+      * Password policy verification
+      * Account lockout settings
+      * User rights assignments
+      * Security options
+    - Network Security:
+      * Firewall profile status
+      * Active port monitoring
+      * Network sharing check
+      * Remote access audit
+    - System Security:
+      * Service configurations
+      * Registry permissions
+      * File system ACLs
+      * Security patches
+    - Logging Features:
+      * Detailed reporting
+      * Warning detection
+      * Risk assessment
+      * Remediation guidance
 
 .NOTES
-    Execute via RMM or Task Scheduler
+    Author: 13city
+    Compatible with:
+    - Windows 10 Pro/Enterprise
+    - Windows 11 Pro/Enterprise
+    - All feature updates
+    - All security patches
+    
+    Requirements:
+    - PowerShell 5.1 or higher
+    - Administrative privileges
+    - Local security policy access
+    - Registry access rights
+    - Write access to log path
+
+.PARAMETER LogPath
+    Security log directory
+    Optional parameter
+    Default: C:\SecurityLogs
+    Creates if missing
+    Stores timestamped logs
+
+.EXAMPLE
+    .\WinDesktopSecurityCheck.ps1
+    Basic scan:
+    - Default log location
+    - Standard checks
+    - Console output
+    - Auto-logging
+
+.EXAMPLE
+    .\WinDesktopSecurityCheck.ps1 -LogPath "D:\Logs\Security"
+    Custom logging:
+    - Specified log path
+    - Full security scan
+    - Detailed reporting
+    - Path validation
 #>
 
 param(

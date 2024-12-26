@@ -1,15 +1,81 @@
-<#
+<# 
 .SYNOPSIS
-    Advanced security checks on an on-prem AD Domain Controller.
+    Advanced security assessment and compliance checks for Active Directory Domain Controllers.
 
 .DESCRIPTION
-    - Verifies replication health (SYSVOL, DFSR).
-    - Checks Kerberos policy for max ticket life, encryption.
-    - Identifies unconstrained delegation usage.
-    - Audits AdminSDHolder mismatch in protected groups.
+    This script performs comprehensive security auditing and compliance checks on Active Directory Domain Controllers:
+    - Verifies AD replication health status (SYSVOL, DFSR)
+    - Audits Kerberos security policy configuration
+    - Detects security vulnerabilities in delegation settings
+    - Validates AdminSDHolder and protected group configurations
+    - Monitors critical security events and changes
+    - Generates detailed security assessment reports
+    - Provides remediation recommendations
+    - Ensures compliance with security best practices
 
 .NOTES
-    Requires: ActiveDirectory module
+    Author: 13city
+    Compatible with: Windows Server 2012 R2, 2016, 2019, 2022
+    Requirements:
+    - ActiveDirectory PowerShell module
+    - Domain Controller role
+    - Enterprise Admin or Domain Admin rights
+    - Write access to log directory
+    - PowerShell 5.1 or higher
+    - RSAT AD DS and AD LDS Tools
+    - Group Policy Management tools
+
+.PARAMETER LogPath
+    Directory where security assessment logs will be written
+    Default: C:\Logs
+    Creates timestamped log files with detailed findings
+    Maintains history of previous security checks
+
+.PARAMETER GenerateReport
+    Switch to enable HTML report generation
+    Creates comprehensive security assessment document
+    Default: False
+
+.PARAMETER ReportPath
+    Path where HTML security report will be saved
+    Only used when GenerateReport is enabled
+    Default: [LogPath]\SecurityReport.html
+
+.PARAMETER CheckInterval
+    Frequency of recurring security checks in minutes
+    Used for continuous monitoring mode
+    Default: 60 minutes
+    Minimum: 15 minutes
+
+.PARAMETER AlertThreshold
+    Number of security issues before triggering critical alert
+    Used to determine overall security status
+    Default: 5 issues
+    Range: 1-100
+
+.EXAMPLE
+    .\AdvancedADDCSecurityChecks.ps1
+    Runs basic security assessment with default settings:
+    - Uses default log path (C:\Logs)
+    - No HTML report generation
+    - Single pass security check
+    - Default alert thresholds
+
+.EXAMPLE
+    .\AdvancedADDCSecurityChecks.ps1 -LogPath "D:\Security\Logs" -GenerateReport
+    Runs comprehensive security audit with reporting:
+    - Custom log directory
+    - Generates HTML security report
+    - Includes remediation recommendations
+    - Uses default thresholds
+
+.EXAMPLE
+    .\AdvancedADDCSecurityChecks.ps1 -CheckInterval 30 -AlertThreshold 3
+    Runs continuous security monitoring:
+    - Checks every 30 minutes
+    - Alerts on 3 or more issues
+    - Uses default logging location
+    - No HTML report generation
 #>
 
 param(

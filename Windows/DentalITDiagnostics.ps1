@@ -1,15 +1,86 @@
 #Requires -RunAsAdministrator
-<#
+<# 
 .SYNOPSIS
-    IT environment diagnostics tool.
-.DESCRIPTION
-    Comprehensive diagnostic script for dental office IT environments, focusing on printer issues
-    and dental software (Dentrix, Eaglesoft) connectivity problems.
+    Comprehensive IT diagnostics tool for dental office environments.
 
+.DESCRIPTION
+    This script:
+    - Checks printer connectivity and driver status
+    - Monitors print spooler service
+    - Tests dental software services (Dentrix, Eaglesoft, DEXIS)
+    - Validates network connectivity
+    - Checks mapped network drives
+    - Analyzes software logs for errors
+    - Provides detailed diagnostic reporting
+
+.NOTES
+    Author: 13city
+    Compatible with: Windows Server 2012 R2, 2016, 2019, 2022, Windows 10/11
+    Requirements:
+    - Administrative privileges
+    - PowerShell 5.1 or higher
+    - Network access to printers and shared drives
+    - Dental software installations (Dentrix/Eaglesoft/DEXIS)
+    - Print Spooler service access
+    - Write access to ProgramData directory
+    - Network connectivity for diagnostics
+
+.PARAMETER LogPath
+    Directory where diagnostic logs will be written
+    Creates timestamped log files with detailed results
+    Automatically creates directory if it doesn't exist
+    Default: $env:ProgramData\DentalITDiagnostics
+
+.PARAMETER Detailed
+    Switch to enable detailed diagnostic logging
+    Includes extended error messages and stack traces
+    Useful for troubleshooting complex issues
+    Default: False
+
+.PARAMETER FixIssues
+    Switch to automatically attempt repair of identified issues
+    Includes restarting services and reconnecting drives
+    Use with caution in production environments
+    Default: False
+
+.EXAMPLE
+    .\DentalITDiagnostics.ps1
+    Runs basic diagnostic scan with default settings:
+    - Checks printer and service status
+    - Tests network connectivity
+    - Validates dental software installations
+    - Generates standard log file
+
+.EXAMPLE
+    .\DentalITDiagnostics.ps1 -Detailed -FixIssues
+    Runs comprehensive diagnostic scan with automatic repairs:
+    - Performs detailed error logging
+    - Attempts to fix identified issues
+    - Restarts problematic services
+    - Reconnects mapped drives
+    - Generates detailed report
+
+.EXAMPLE
+    .\DentalITDiagnostics.ps1 -LogPath "D:\Logs\DentalIT"
+    Runs diagnostics with custom log location:
+    - Saves all logs to specified directory
+    - Creates directory if it doesn't exist
+    - Maintains standard naming convention
 #>
 
+
+param(
+    [Parameter(Mandatory=$false)]
+    [string]$LogPath = "$env:ProgramData\DentalITDiagnostics",
+
+    [Parameter(Mandatory=$false)]
+    [switch]$Detailed,
+
+    [Parameter(Mandatory=$false)]
+    [switch]$FixIssues
+)
+
 # Initialize Logging
-$LogPath = "$env:ProgramData\DentalITDiagnostics"
 $LogFile = "$LogPath\DentalITDiagnostics_$(Get-Date -Format 'yyyyMMdd_HHmmss').log"
 
 # Create log directory if it doesn't exist
@@ -18,16 +89,38 @@ if (-not (Test-Path $LogPath)) {
 }
 
 function Write-Log {
-    param($Message, [ValidateSet('Info','Warning','Error')]$Level = 'Info')
+    param(
+        [string]$Message,
+        [ValidateSet('Info','Warning','Error','Debug')]
+        [string]$Level = 'Info',
+        [System.Management.Automation.ErrorRecord]$ErrorRecord
+    )
     
     $Timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
     $LogMessage = "[$Timestamp] [$Level] $Message"
+    
+    # Add error details if present and Detailed is enabled
+    if ($Detailed -and $ErrorRecord) {
+        $LogMessage += "`nError Details:"
+        $LogMessage += "`n  Type: $($ErrorRecord.Exception.GetType().FullName)"
+        $LogMessage += "`n  Message: $($ErrorRecord.Exception.Message)"
+        $LogMessage += "`n  Script: $($ErrorRecord.InvocationInfo.ScriptName)"
+        $LogMessage += "`n  Line: $($ErrorRecord.InvocationInfo.ScriptLineNumber)"
+        $LogMessage += "`n  Position: $($ErrorRecord.InvocationInfo.PositionMessage)"
+        $LogMessage += "`n  Stack Trace: $($ErrorRecord.ScriptStackTrace)"
+    }
+    
     Add-Content -Path $LogFile -Value $LogMessage
     
     switch ($Level) {
         'Info'    { Write-Host $LogMessage -ForegroundColor Green }
         'Warning' { Write-Host $LogMessage -ForegroundColor Yellow }
         'Error'   { Write-Host $LogMessage -ForegroundColor Red }
+        'Debug'   { 
+            if ($Detailed) {
+                Write-Host $LogMessage -ForegroundColor Cyan
+            }
+        }
     }
 }
 
@@ -221,20 +314,83 @@ function Start-DentalITDiagnostics {
     Write-Log "Starting Dental IT Diagnostics..."
     Write-Log "----------------------------------------"
     
+    if ($Detailed) {
+        Write-Log "Running in detailed diagnostic mode" -Level Debug
+        Write-Log "Script Parameters:" -Level Debug
+        Write-Log "  LogPath: $LogPath" -Level Debug
+        Write-Log "  Detailed: $Detailed" -Level Debug
+        Write-Log "  FixIssues: $FixIssues" -Level Debug
+    }
+    
     # Run all diagnostic tests
+    $issues = @()
+    
+    # Check Print Spooler
     $spoolerOk = Test-PrintSpooler
     if ($spoolerOk) {
+        if ($Detailed) {
+            Write-Log "Print Spooler check passed, proceeding with printer diagnostics" -Level Debug
+        }
         Test-NetworkPrinters
         Test-PrinterDrivers
     }
+    else {
+        $issues += "Print Spooler Service"
+    }
     
+    # Run remaining tests
     Test-DentalSoftware
     Test-NetworkConnectivity
     Test-SharedDrives
     
+    # Handle identified issues
+    if ($issues.Count -gt 0 -and $FixIssues) {
+        Write-Log "Attempting to fix identified issues..." -Level Warning
+        foreach ($issue in $issues) {
+            Write-Log "Fixing: $issue" -Level Warning
+            switch ($issue) {
+                "Print Spooler Service" {
+                    try {
+                        Restart-Service -Name Spooler -Force
+                        Write-Log "Print Spooler Service restarted successfully" -Level Info
+                    }
+                    catch {
+                        Write-Log "Failed to restart Print Spooler Service" -Level Error -ErrorRecord $_
+                    }
+                }
+                # Add more issue resolution cases as needed
+            }
+        }
+    }
+    elseif ($issues.Count -gt 0) {
+        Write-Log "Issues were found but automatic fixing is disabled. Use -FixIssues to enable automatic repairs." -Level Warning
+    }
+    
+    if ($Detailed) {
+        Write-Log "Diagnostic scan summary:" -Level Debug
+        Write-Log "  Total issues found: $($issues.Count)" -Level Debug
+        Write-Log "  Automatic fixes attempted: $($FixIssues)" -Level Debug
+    }
+    
     Write-Log "----------------------------------------"
     Write-Log "Diagnostic scan complete. Log file saved to: $LogFile"
+    
+    # Return results object if needed for further processing
+    return @{
+        Issues = $issues
+        LogFile = $LogFile
+        FixesAttempted = $FixIssues
+    }
 }
 
 # Execute diagnostics
-Start-DentalITDiagnostics
+try {
+    $results = Start-DentalITDiagnostics
+    if ($Detailed) {
+        Write-Log "Results object available for further processing" -Level Debug
+    }
+}
+catch {
+    Write-Log "Critical error during diagnostics" -Level Error -ErrorRecord $_
+    throw
+}

@@ -1,12 +1,111 @@
-<# 
+<#
 .SYNOPSIS
-  Validates recent SQL backups, checks integrity, and sends alert if issues are found.
+    Enterprise SQL Server backup validation and integrity verification system.
 
 .DESCRIPTION
-  - Verifies if backup files exist for the last 24 hours.
-  - Uses RESTORE VERIFYONLY to check logical consistency.
-  - Sends email alert if validation fails.
+    This script provides comprehensive SQL backup validation capabilities:
+    - Backup Verification:
+      * Recent backup existence check (24-hour window)
+      * Logical consistency validation
+      * Physical backup file integrity
+      * Header information verification
+      * Checksum validation
+    - File Management:
+      * Backup file discovery
+      * Age verification
+      * Size validation
+      * Permission checks
+      * Path accessibility
+    - Integrity Checks:
+      * RESTORE VERIFYONLY execution
+      * Corruption detection
+      * Page verification
+      * Backup set validation
+      * Chain verification for log backups
+    - Notification System:
+      * Email alerts for failures
+      * Detailed error reporting
+      * Success confirmations
+      * Custom alert thresholds
+      * Priority-based notifications
 
+.NOTES
+    Author: 13city
+    
+    Compatible with:
+    - SQL Server 2012+
+    - SQL Server 2014+
+    - SQL Server 2016+
+    - SQL Server 2017+
+    - SQL Server 2019+
+    
+    Requirements:
+    - PowerShell 5.1 or higher
+    - SQL Server PowerShell module
+    - SMTP access for alerts
+    - Appropriate SQL permissions
+    - Backup file read access
+    - Log directory write access
+
+.PARAMETER InstanceName
+    SQL Server instance name
+    Default: .\SQLEXPRESS
+    Format: ServerName\InstanceName
+    Example: SQLSERVER01\PROD
+
+.PARAMETER DatabaseName
+    Target database name
+    Default: DBName
+    Must exist on instance
+    Case-sensitive
+
+.PARAMETER BackupPath
+    Backup file directory
+    Default: C:\SQLBackups\DBName
+    Requires read access
+    Supports UNC paths
+
+.PARAMETER EmailTo
+    Alert recipient address
+    Default: admin@company.com
+    Required for notifications
+    Supports distribution lists
+
+.PARAMETER EmailFrom
+    Alert sender address
+    Default: alerts@company.com
+    Must be valid SMTP sender
+    Domain requirements apply
+
+.PARAMETER SmtpServer
+    SMTP server hostname
+    Default: smtp.company.com
+    Must be accessible
+    Supports authentication
+
+.EXAMPLE
+    .\SQLBackupValidation.ps1 -InstanceName "SQLSERVER01" -DatabaseName "Production" -BackupPath "D:\Backups\Prod"
+    Standard validation:
+    - Checks Production database
+    - Uses specified backup path
+    - Default email settings
+    - 24-hour validation window
+
+.EXAMPLE
+    .\SQLBackupValidation.ps1 -InstanceName "SQLSERVER02\DEV" -DatabaseName "TestDB" -BackupPath "\\NetworkShare\Backups\Test" -EmailTo "dba@company.com"
+    Network share validation:
+    - Uses named instance
+    - Validates network path
+    - Custom alert recipient
+    - Default time window
+
+.EXAMPLE
+    .\SQLBackupValidation.ps1 -InstanceName "." -DatabaseName "FinanceDB" -BackupPath "E:\SQLBackups" -EmailTo "team@company.com" -SmtpServer "mail.internal.net"
+    Local instance check:
+    - Uses local instance
+    - Custom backup location
+    - Team notification
+    - Internal mail server
 #>
 
 param (

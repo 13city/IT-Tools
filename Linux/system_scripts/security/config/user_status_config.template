@@ -1,0 +1,16 @@
+# Configuration template for check_user_status.sh
+# Copy this file to user_status_config and modify with your settings
+
+# Slack Webhook URL for notifications
+# Create a webhook URL in your Slack workspace settings
+export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+
+# Email recipient for notifications
+# Use a comma-separated list for multiple recipients
+export EMAIL_RECIPIENT="admin@example.com"
+
+# Log directory path (relative to script location)
+# Default: ../logs
+#LOG_DIR="../logs"
+
+# Additional configuration options can be added here

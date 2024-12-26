@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+"""
+Device Manager Module
+Author: 13city
+
+Handles device discovery, management, and status tracking for network devices.
+Supports both static device configuration and automatic network discovery.
+"""
 
 import logging
 from typing import Dict, List, Any

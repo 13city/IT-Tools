@@ -1,0 +1,65 @@
+# Configuration template for disk_usage.sh
+# Copy this file to disk_usage_config and modify with your settings
+
+# Notification settings
+# Create a webhook URL in your Slack workspace settings
+export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+
+# Email recipient for notifications
+# Use a comma-separated list for multiple recipients
+export EMAIL_RECIPIENT="admin@example.com"
+
+# Default alert threshold (percentage)
+# Uncomment and modify to override script defaults
+#DEFAULT_ALERT_THRESHOLD=10
+
+# Number of top directories to show
+# Uncomment and modify to override script defaults
+#DEFAULT_TOP_N=5
+
+# Default target directory
+# Uncomment and modify to override script defaults
+#DEFAULT_TARGET_DIR="/var"
+
+# Critical directories to monitor
+# Add your important directories here
+CRITICAL_DIRS=(
+    #"/var"
+    #"/opt"
+    #"/home"
+    #"/usr/local"
+)
+
+# Directory-specific thresholds
+# Format: DIR_THRESHOLD_[dirname]
+# Replace non-alphanumeric characters with underscore
+#DIR_THRESHOLD_var=85
+#DIR_THRESHOLD_opt=75
+#DIR_THRESHOLD_home=90
+
+# Notification severity levels (percentage)
+#CRITICAL_THRESHOLD=95
+#WARNING_THRESHOLD=85
+#INFO_THRESHOLD=75
+
+# Log settings
+# Default: ../logs
+#LOG_DIR="../logs"
+
+# Log retention (in days)
+# Default: 30 days
+#LOG_RETENTION=30
+
+# Scan exclusions
+# Directories to exclude from size calculations
+EXCLUDE_DIRS=(
+    #"/var/cache"
+    #"/var/tmp"
+    #"/var/log"
+)
+
+# Size display format
+# Options: human (e.g., 1.2G) or bytes
+#SIZE_FORMAT="human"
+
+# Additional configuration options can be added here

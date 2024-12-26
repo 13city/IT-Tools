@@ -3,46 +3,116 @@
 
 <#
 .SYNOPSIS
-    Validates Veeam backup jobs and performs test restores in sandbox environment.
+    Advanced Veeam backup validation and test restore automation toolkit.
 
 .DESCRIPTION
-    This script:
-    - Connects to Veeam Backup & Replication server
-    - Verifies last successful backup for each protected workload
-    - Performs test restores in isolated environment
-    - Validates restored VMs
-    - Sends notifications via email or Slack
-    - Generates detailed validation reports
+    This script provides comprehensive Veeam backup validation capabilities:
+    - Backup Validation:
+      * Job status verification
+      * Completion time checks
+      * Success rate analysis
+      * Error pattern detection
+    - Test Restore Operations:
+      * Automated VM recovery
+      * Sandbox environment testing
+      * Network isolation
+      * Power-on verification
+    - Notification System:
+      * Multi-channel alerts
+      * Priority-based messaging
+      * Detailed error reporting
+      * Success confirmations
+    - Reporting Features:
+      * HTML report generation
+      * Status summaries
+      * Failure analysis
+      * Performance metrics
+
+.NOTES
+    Author: 13city
+    Compatible with:
+    - Veeam Backup & Replication 9.5+
+    - Veeam Backup & Replication 10+
+    - Veeam Backup & Replication 11+
+    - Windows Server 2016+
+    - PowerShell 5.1+
+    
+    Requirements:
+    - Veeam.Backup.PowerShell module
+    - Administrative privileges
+    - Network connectivity to Veeam server
+    - Access to backup infrastructure
+    - Email or Slack for notifications
 
 .PARAMETER VBRServer
-    Veeam Backup & Replication server hostname
+    Veeam server hostname
+    Required parameter
+    Must be network accessible
+    Format: FQDN or IP address
 
 .PARAMETER Credential
-    Credentials for Veeam server authentication
+    Veeam authentication
+    Optional parameter
+    Uses Get-Credential prompt
+    Requires admin rights
 
 .PARAMETER NotificationMethod
-    Email or Slack for notifications
+    Alert delivery method
+    Required parameter
+    Values: Email, Slack
+    Controls notification routing
 
 .PARAMETER EmailTo
-    Email recipients for notifications
+    Notification recipients
+    Required for Email method
+    Accepts multiple addresses
+    Comma-separated list
 
 .PARAMETER EmailFrom
-    From address for email notifications
+    Sender address
+    Required for Email method
+    Must be valid email
+    Used in From field
 
 .PARAMETER SmtpServer
-    SMTP server for email notifications
+    Email server hostname
+    Required for Email method
+    Must be accessible
+    Handles mail routing
 
 .PARAMETER SlackWebhook
-    Slack webhook URL for notifications
+    Slack integration URL
+    Required for Slack method
+    Must be valid webhook
+    Enables Slack messaging
 
 .PARAMETER TestRestoreEnabled
-    Enable/disable test restore functionality
+    Recovery testing switch
+    Optional parameter
+    Default: True
+    Enables VM validation
 
 .PARAMETER SandboxNetwork
-    Network name for sandbox test restores
+    Isolated network name
+    Optional parameter
+    Default: "Isolated"
+    For test restores
 
 .EXAMPLE
     .\VeeamBackupValidator.ps1 -VBRServer "veeam-01" -NotificationMethod Email -EmailTo "admin@company.com"
+    Basic validation:
+    - Email notifications
+    - Default test restore
+    - Standard reporting
+    - Auto-cleanup
+
+.EXAMPLE
+    .\VeeamBackupValidator.ps1 -VBRServer "veeam-01" -NotificationMethod Slack -SlackWebhook "https://hooks.slack.com/xxx" -TestRestoreEnabled $false
+    Slack monitoring:
+    - Slack notifications
+    - Skips test restores
+    - Basic validation
+    - Quick execution
 #>
 
 [CmdletBinding()]

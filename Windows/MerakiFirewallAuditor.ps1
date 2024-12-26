@@ -1,27 +1,78 @@
 #Requires -Version 5.1
 
-<#
+<# 
 .SYNOPSIS
-    Audits Cisco Meraki firewall configurations and generates compliance reports.
+    Advanced Cisco Meraki firewall configuration auditing and compliance reporting system.
 
 .DESCRIPTION
-    This script connects to Cisco Meraki dashboard API to:
-    - Retrieve firewall rules, NAT policies, and VPN configurations
-    - Identify redundant or conflicting rules
-    - Check against security best practices
-    - Generate HTML/CSV reports for review
+    This script provides comprehensive Meraki firewall analysis and reporting:
+    - Retrieves and analyzes firewall rules and policies
+    - Validates NAT configurations and VPN settings
+    - Identifies security risks and rule conflicts
+    - Checks compliance with best practices
+    - Detects redundant or obsolete rules
+    - Generates detailed audit reports
+    - Validates rule documentation
+    - Monitors high-risk port usage
+    - Ensures configuration consistency
+    - Provides remediation recommendations
+
+.NOTES
+    Author: 13city
+    Compatible with: Windows Server 2016-2022, Windows 10/11
+    Requirements:
+    - PowerShell 5.1 or higher
+    - Internet connectivity
+    - Meraki Dashboard API access
+    - Valid API key with read permissions
+    - Organization admin rights
+    - Write access to script directory
 
 .PARAMETER ApiKey
-    The API key for accessing Cisco Meraki dashboard
+    Meraki Dashboard API key
+    Required: Yes
+    Format: 40-character string
+    Obtain from: Meraki Dashboard > Organization > Settings
+    Must have read permissions
 
 .PARAMETER OrganizationId
-    The organization ID for Meraki dashboard
+    Meraki Organization identifier
+    Required: Yes
+    Format: String (e.g., "463308")
+    Found in: Organization settings URL
+    Must be accessible to API key
 
 .PARAMETER ReportFormat
-    The format of the output report (HTML or CSV)
+    Output report format selection
+    Required: No
+    Default: "HTML"
+    Options: "HTML", "CSV"
+    Affects report generation format
 
 .EXAMPLE
-    .\MerakiFirewallAuditor.ps1 -ApiKey "your-api-key" -OrganizationId "org-id" -ReportFormat "HTML"
+    .\MerakiFirewallAuditor.ps1 -ApiKey "1234567890abcdef1234567890abcdef12345678" -OrganizationId "463308"
+    Basic audit with HTML report:
+    - Uses default HTML format
+    - Analyzes all networks
+    - Generates comprehensive report
+    - Saves in script directory
+
+.EXAMPLE
+    .\MerakiFirewallAuditor.ps1 -ApiKey "1234567890abcdef1234567890abcdef12345678" -OrganizationId "463308" -ReportFormat "CSV"
+    CSV report generation:
+    - Outputs data in CSV format
+    - Enables data analysis
+    - Supports automation
+    - Includes all audit findings
+
+.EXAMPLE
+    $key = "1234567890abcdef1234567890abcdef12345678"
+    .\MerakiFirewallAuditor.ps1 -ApiKey $key -OrganizationId "463308" -ReportFormat "HTML"
+    Secure key handling:
+    - Uses variable for API key
+    - Full HTML report
+    - Enhanced security
+    - Complete audit trail
 #>
 
 [CmdletBinding()]

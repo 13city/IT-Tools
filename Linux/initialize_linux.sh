@@ -1,16 +1,37 @@
 #!/usr/bin/env bash
-#
-# initialize_linux.sh
-#
-# SYNOPSIS
+# .SYNOPSIS
 #   Performs basic setup on a fresh Linux server.
-#   - Updates system
-#   - Installs common packages
-#   - Creates a privileged user
-#   - Configures firewall (ufw or firewalld if needed)
 #
-# NOTES
-#   Compatible with: Ubuntu, Debian, CentOS, RHEL
+# .DESCRIPTION
+#   This script:
+#   - Updates system packages
+#   - Installs common utilities
+#   - Creates a privileged user
+#   - Configures firewall (ufw or firewalld)
+#
+# .NOTES
+#   Author: 13city
+#   Compatible with: Ubuntu 18.04+, RHEL/CentOS 7+, Debian 10+
+#
+# .PARAMETER LOGFILE
+#   Path where initialization logs will be written
+#   Default: /var/log/initialize_linux.log
+#
+# .PARAMETER ADMINUSER
+#   Username for the new privileged user
+#   Default: admin
+#
+# .PARAMETER ADMINPASS
+#   Password for the new privileged user
+#   Default: Admin@123
+#
+# .PARAMETER ENABLE_FIREWALL
+#   Whether to configure the firewall
+#   Default: true
+#
+# .EXAMPLE
+#   ./initialize_linux.sh
+#   Initializes server with default settings
 #
 
 LOGFILE="/var/log/initialize_linux.log"

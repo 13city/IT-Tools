@@ -1,0 +1,39 @@
+# Configuration template for net_check.sh
+# List one host per line, excluding comments and empty lines
+# Copy this file to hosts.conf and modify with your hosts
+
+# DNS Servers
+#8.8.8.8
+#8.8.4.4
+#1.1.1.1
+
+# Web Services
+#google.com
+#github.com
+#cloudflare.com
+
+# Internal Services
+#localhost
+#192.168.1.1
+#internal-service.local
+
+# Critical Infrastructure
+#vpn.company.com
+#mail.company.com
+#db.company.com
+
+# Load Balancers
+#lb01.company.com
+#lb02.company.com
+
+# Application Servers
+#app01.company.com
+#app02.company.com
+#app03.company.com
+
+# Monitoring Targets
+# Format: hostname[:ports]
+#monitor1.company.com:80,443,8080
+#monitor2.company.com:3306,6379
+
+# Additional hosts can be added here

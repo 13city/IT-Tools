@@ -3,40 +3,115 @@
 
 <#
 .SYNOPSIS
-    Comprehensive SQL Server database health management, monitoring, and maintenance script.
+    Enterprise-grade SQL Server database health monitoring and maintenance automation toolkit.
 
 .DESCRIPTION
-    This script performs comprehensive health checks on SQL Server databases including:
-    - Database corruption checks
-    - Index fragmentation analysis
-    - Backup schedule validation
-    - Performance metrics monitoring
-    - Automatic database rebuilding when needed
-    - Email notifications for critical issues
+    This script provides comprehensive SQL Server database management capabilities:
+    - Health Monitoring:
+      * Database corruption detection
+      * Index fragmentation analysis
+      * Backup validation and scheduling
+      * Performance metrics tracking
+      * Storage space monitoring
+      * Transaction log analysis
+    - Maintenance Operations:
+      * Automated index maintenance
+      * Smart database rebuilding
+      * Backup verification
+      * Statistics updates
+      * Log file management
+    - Reporting Features:
+      * Detailed health reports
+      * Performance trend analysis
+      * Capacity planning metrics
+      * Maintenance operation logs
+    - Alert Management:
+      * Configurable email notifications
+      * Priority-based alerting
+      * Customizable thresholds
+      * Escalation workflows
+
+.NOTES
+    Author: 13city
+    
+    Compatible with:
+    - SQL Server 2016+
+    - Windows Server 2012 R2+
+    - PowerShell 5.1+
+    
+    Requirements:
+    - SqlServer PowerShell module
+    - SQL Server Management Tools
+    - Appropriate SQL permissions
+    - Email server access
+    - Write access to log directory
+    - Network connectivity to SQL instances
 
 .PARAMETER ServerInstance
     SQL Server instance name
+    Required for connection
+    Format: ServerName\InstanceName
+    Example: SQLSERVER01\PROD
 
 .PARAMETER DatabaseName
-    Target database name (use * for all databases)
+    Target database name
+    Use * for all databases
+    Supports wildcards
+    Default: * (all databases)
 
 .PARAMETER EmailTo
-    Email address for notifications
+    Notification recipient address
+    Required for alerts
+    Supports multiple addresses
+    Format: user@domain.com
 
 .PARAMETER EmailFrom
-    From email address for notifications
+    Alert sender email address
+    Required for notifications
+    Must be valid SMTP sender
+    Format: alerts@domain.com
 
 .PARAMETER SmtpServer
-    SMTP server for sending notifications
+    SMTP server for notifications
+    Required for email alerts
+    Must be accessible from script
+    Example: smtp.company.com
 
 .PARAMETER RebuildThreshold
-    Fragmentation percentage threshold for index rebuild (default: 30)
+    Index fragmentation threshold
+    Default: 30 (percent)
+    Range: 0-100
+    Triggers rebuild operations
 
 .PARAMETER LogPath
-    Path for log files
+    Path for logging operations
+    Default: C:\Logs\SQL
+    Creates if not exists
+    Requires write access
 
 .EXAMPLE
-    .\SQL-DatabaseHealthManager.ps1 -ServerInstance "SQLSERVER01" -DatabaseName "*" -EmailTo "dba@company.com"
+    .\SQL-DatabaseHealthManager.ps1 -ServerInstance "SQLSERVER01" -DatabaseName "*" -EmailTo "dba@company.com" -EmailFrom "sql@company.com" -SmtpServer "smtp.company.com"
+    Full health check with notifications:
+    - Monitors all databases
+    - Sends email alerts
+    - Uses default thresholds
+    - Creates detailed logs
+
+.EXAMPLE
+    .\SQL-DatabaseHealthManager.ps1 -ServerInstance "SQLSERVER01\PROD" -DatabaseName "CustomerDB" -RebuildThreshold 20 -LogPath "D:\SQLLogs"
+    Targeted database maintenance:
+    - Monitors specific database
+    - Lower fragmentation threshold
+    - Custom log location
+    - Uses default email settings
+
+.EXAMPLE
+    .\SQL-DatabaseHealthManager.ps1 -ServerInstance "SQLSERVER01" -DatabaseName "Finance*" -EmailTo "team@company.com" -EmailFrom "alerts@company.com" -SmtpServer "smtp.company.com"
+    Pattern-based monitoring:
+    - Monitors databases matching pattern
+    - Sends alerts to team
+    - Uses standard thresholds
+    - Default log location
 #>
 
 [CmdletBinding()]

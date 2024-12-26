@@ -4,43 +4,109 @@
 
 <#
 .SYNOPSIS
-    Validates Windows Server Backup jobs and performs test restores.
+    Advanced Windows Server Backup validation and recovery testing toolkit.
 
 .DESCRIPTION
-    This script:
-    - Verifies Windows Server Backup status
-    - Checks backup integrity
-    - Performs test restores in isolated environment
-    - Validates restored data
-    - Sends notifications via email or Slack
-    - Generates detailed validation reports
+    This script provides comprehensive backup validation capabilities:
+    - Backup Verification:
+      * Status monitoring
+      * Age verification
+      * Size validation
+      * Completion checks
+    - Integrity Testing:
+      * Catalog verification
+      * Volume validation
+      * File integrity checks
+      * Corruption detection
+    - Recovery Testing:
+      * Test restores
+      * File verification
+      * Hash validation
+      * Isolation testing
+    - Reporting Features:
+      * HTML report generation
+      * Status summaries
+      * Error analysis
+      * Performance metrics
+
+.NOTES
+    Author: 13city
+    Compatible with:
+    - Windows Server 2012 R2
+    - Windows Server 2016
+    - Windows Server 2019
+    - Windows Server 2022
+    
+    Requirements:
+    - PowerShell 5.1 or higher
+    - WindowsServerBackup module
+    - Administrative privileges
+    - Backup access permissions
+    - Test restore space
 
 .PARAMETER BackupTarget
-    Path to backup location
+    Backup storage location
+    Required parameter
+    Must be accessible path
+    Supports local/network paths
 
 .PARAMETER TestRestorePath
-    Path for test restores
+    Recovery test location
+    Optional parameter
+    Default: D:\TestRestore
+    Requires write access
 
 .PARAMETER NotificationMethod
-    Email or Slack for notifications
+    Alert delivery method
+    Required parameter
+    Values: Email, Slack
+    Controls notification routing
 
 .PARAMETER EmailTo
-    Email recipients for notifications
+    Notification recipients
+    Required for Email method
+    Accepts multiple addresses
+    Comma-separated list
 
 .PARAMETER EmailFrom
-    From address for email notifications
+    Sender address
+    Required for Email method
+    Must be valid email
+    Used in From field
 
 .PARAMETER SmtpServer
-    SMTP server for email notifications
+    Email server hostname
+    Required for Email method
+    Must be accessible
+    Handles mail routing
 
 .PARAMETER SlackWebhook
-    Slack webhook URL for notifications
+    Slack integration URL
+    Required for Slack method
+    Must be valid webhook
+    Enables Slack messaging
 
 .PARAMETER TestRestoreEnabled
-    Enable/disable test restore functionality
+    Recovery testing switch
+    Optional parameter
+    Default: True
+    Enables restore validation
 
 .EXAMPLE
-    .\WindowsServerBackupValidator.ps1 -BackupTarget "E:\Backups" -TestRestorePath "D:\TestRestore" -NotificationMethod Email -EmailTo "admin@company.com"
+    .\WindowsServerBackupValidator.ps1 -BackupTarget "E:\Backups" -NotificationMethod Email -EmailTo "admin@company.com"
+    Basic validation:
+    - Email notifications
+    - Default test path
+    - Standard reporting
+    - Auto-cleanup
+
+.EXAMPLE
+    .\WindowsServerBackupValidator.ps1 -BackupTarget "\\server\backups" -TestRestorePath "D:\Testing" -NotificationMethod Slack -SlackWebhook "https://hooks.slack.com/xxx" -TestRestoreEnabled $false
+    Network validation:
+    - Network backup source
+    - Custom test location
+    - Slack notifications
+    - Skips test restores
 #>
 
 [CmdletBinding()]

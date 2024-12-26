@@ -1,9 +1,45 @@
 #!/usr/bin/env bash
-#
-# mysql_database_manager.sh
-#
-# SYNOPSIS
+# .SYNOPSIS
 #   Creates or rebuilds a MySQL/MariaDB database, optionally loads .sql files.
+#
+# .DESCRIPTION
+#   This script:
+#   - Creates new MySQL/MariaDB databases or rebuilds existing ones
+#   - Supports optional database initialization via SQL files
+#   - Provides options for complete database rebuilds
+#   - Executes SQL scripts in sequence
+#   - Maintains detailed operation logs
+#
+# .NOTES
+#   Author: 13city
+#   Compatible with: Ubuntu 18.04+, RHEL/CentOS 7+, Debian 10+
+#   Requirements: MySQL/MariaDB server, mysql client
+#
+# .PARAMETER DB_NAME
+#   Name of the database to create/rebuild
+#
+# .PARAMETER REBUILD
+#   Whether to drop and recreate the database
+#   Values: true|false
+#
+# .PARAMETER SQL_FOLDER
+#   Optional path to folder containing .sql initialization scripts
+#
+# .PARAMETER DB_USER
+#   MySQL username for authentication
+#   Default: UserName
+#
+# .PARAMETER DB_PASS
+#   MySQL password for authentication
+#   Default: ***Password***
+#
+# .EXAMPLE
+#   ./mysql_database_manager.sh mydb false
+#   Creates new database without rebuilding
+#
+# .EXAMPLE
+#   ./mysql_database_manager.sh mydb true /path/to/scripts
+#   Rebuilds database and runs initialization scripts
 #
 
 DB_NAME="$1"

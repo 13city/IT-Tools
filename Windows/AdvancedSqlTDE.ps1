@@ -1,15 +1,100 @@
-<#
+<# 
 .SYNOPSIS
-    Implements and validates Transparent Data Encryption (TDE) on a SQL Server database.
+    Advanced SQL Server Transparent Data Encryption (TDE) implementation and management toolkit.
 
 .DESCRIPTION
-    - Checks if a database is already encrypted.
-    - If not, creates a master key, certificate, and applies TDE.
-    - Validates encryption state.
-    - Logs findings.
+    This comprehensive script provides enterprise-grade TDE implementation and management:
+    - Performs pre-encryption database validation
+    - Implements secure master key generation
+    - Creates and manages TDE certificates
+    - Enables database encryption with configurable algorithms
+    - Validates encryption status and performance impact
+    - Generates detailed operation logs and reports
+    - Implements secure key backup and recovery procedures
+    - Monitors encryption progress and database performance
+    - Provides rollback capabilities for failed operations
+    - Ensures compliance with data protection standards
 
 .NOTES
-    Requires: SqlServer module or SQLPS
+    Author: 13city
+    Compatible with: Windows Server 2012 R2, 2016, 2019, 2022
+    Requirements:
+    - SQL Server 2012+ Enterprise Edition
+    - SqlServer PowerShell module or SQLPS
+    - SQL Server sysadmin rights
+    - Write access to log and backup directories
+    - Sufficient disk space for encryption process
+    - Database backup before implementation
+    - PowerShell 5.1 or higher
+
+.PARAMETER SqlInstance
+    SQL Server instance name for TDE implementation
+    Format: "ServerName\InstanceName" or "ServerName"
+    Required: Yes
+    Example: "SQL01\PROD" or "SQL01"
+
+.PARAMETER DatabaseName
+    Target database name for TDE encryption
+    Must be online and accessible
+    Required: Yes
+    Cannot be system database
+
+.PARAMETER LogPath
+    Directory for detailed operation logs
+    Default: C:\Logs
+    Creates directory if not exists
+    Maintains historical log files
+
+.PARAMETER EncryptionKeyBackupPath
+    Secure location for TDE certificate and key backups
+    Default: C:\EncryptionBackups
+    Critical for disaster recovery
+    Should be on separate volume
+
+.PARAMETER Algorithm
+    Encryption algorithm selection
+    Default: AES_256
+    Options: AES_128, AES_192, AES_256
+    Affects performance and security level
+
+.PARAMETER ValidateOnly
+    Switch to perform pre-encryption validation only
+    Checks prerequisites and estimates impact
+    Default: False
+
+.PARAMETER MonitorPerformance
+    Switch to enable performance monitoring during encryption
+    Tracks CPU, IO, and encryption progress
+    Default: False
+
+.PARAMETER BackupFirst
+    Switch to force database backup before encryption
+    Recommended for safety
+    Default: True
+
+.EXAMPLE
+    .\AdvancedSqlTDE.ps1 -SqlInstance "SQL01" -DatabaseName "ProductionDB"
+    Basic TDE implementation:
+    - Uses default paths and settings
+    - AES-256 encryption
+    - Standard logging
+    - Automatic key backup
+
+.EXAMPLE
+    .\AdvancedSqlTDE.ps1 -SqlInstance "SQL01\PROD" -DatabaseName "FinanceDB" -LogPath "D:\Logs" -EncryptionKeyBackupPath "E:\KeyBackups" -MonitorPerformance
+    Advanced implementation with monitoring:
+    - Custom log and backup paths
+    - Performance monitoring enabled
+    - Detailed progress tracking
+    - Enhanced logging
+
+.EXAMPLE
+    .\AdvancedSqlTDE.ps1 -SqlInstance "SQL02" -DatabaseName "CustomerDB" -ValidateOnly -Algorithm AES_192
+    Validation-only run with custom settings:
+    - Checks prerequisites
+    - Validates database compatibility
+    - Tests with AES-192
+    - No actual encryption
 #>
 
 param(

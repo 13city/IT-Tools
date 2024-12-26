@@ -1,15 +1,25 @@
 #!/usr/bin/env bash
-#
-# linux_desktop_security_check.sh
-#
-# SYNOPSIS
+# .SYNOPSIS
 #   Security checks for Linux desktop (e.g., Ubuntu, Debian).
 #
-# DESCRIPTION
-#   - Checks if auto-login is enabled (potential security risk).
-#   - Verifies if screensaver lock or idle lock is configured.
-#   - Ensures at least a minimal firewall setup or NAT rules.
-#   - Logs findings to /var/log/linux_desktop_security_check.log
+# .DESCRIPTION
+#   This script:
+#   - Checks if auto-login is enabled (potential security risk)
+#   - Verifies if screensaver lock or idle lock is configured
+#   - Ensures at least a minimal firewall setup or NAT rules
+#   - Logs findings to specified log file
+#
+# .NOTES
+#   Author: 13city
+#   Compatible with: Ubuntu 18.04+, Debian 10+
+#
+# .PARAMETER LOGFILE
+#   Path where security check results will be written
+#   Default: /var/log/linux_desktop_security_check.log
+#
+# .EXAMPLE
+#   ./linux_desktop_security_check.sh
+#   Performs desktop security checks with default logging location
 #
 
 LOGFILE="/var/log/linux_desktop_security_check.log"

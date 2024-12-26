@@ -1,5 +1,81 @@
-# Hyper-V Migration and Replication Manager
-# This script manages VM migrations and monitors replication status
+<# 
+.SYNOPSIS
+    Advanced Hyper-V VM migration and replication management system.
+
+.DESCRIPTION
+    This script provides comprehensive VM migration and replication management:
+    - Performs live VM migrations between hosts
+    - Configures and monitors VM replication
+    - Validates host compatibility
+    - Checks storage requirements
+    - Monitors migration progress
+    - Manages replication settings
+    - Generates detailed operation logs
+    - Supports batch operations
+    - Ensures data consistency
+
+.NOTES
+    Author: 13city
+    Compatible with: Windows Server 2012 R2, 2016, 2019, 2022
+    Requirements:
+    - Hyper-V PowerShell module
+    - Administrative rights on source and destination hosts
+    - Network connectivity between hosts
+    - Sufficient storage space
+    - PowerShell 5.1 or higher
+    - Hyper-V role installed
+
+.PARAMETER SourceHost
+    Source Hyper-V host name
+    Default: Local computer name
+    Example: "HV-SOURCE01"
+
+.PARAMETER DestinationHost
+    Target Hyper-V host for migration/replication
+    Required for migration operations
+    Example: "HV-DEST01"
+
+.PARAMETER VMNames
+    Array of VM names to process
+    Optional: If omitted, processes all VMs
+    Example: @("VM1", "VM2")
+
+.PARAMETER LogPath
+    Path for operation logs
+    Default: Desktop\Migration-Log.txt
+    Creates detailed operation logs
+
+.PARAMETER EnableReplication
+    Switch to enable replication instead of migration
+    Default: False (performs migration)
+    Configures VM replication when specified
+
+.PARAMETER ReplicationFrequencySeconds
+    Replication frequency in seconds
+    Default: 300 (5 minutes)
+    Range: 30-900 seconds
+
+.EXAMPLE
+    .\HyperV-MigrationManager.ps1 -DestinationHost "HV-DEST01" -VMNames "WebServer01"
+    Performs live migration:
+    - Migrates single VM to destination
+    - Uses default logging
+    - No replication setup
+
+.EXAMPLE
+    .\HyperV-MigrationManager.ps1 -DestinationHost "HV-DEST01" -EnableReplication -ReplicationFrequencySeconds 600
+    Sets up VM replication:
+    - Configures 10-minute replication
+    - Replicates all VMs
+    - Monitors replication status
+
+.EXAMPLE
+    .\HyperV-MigrationManager.ps1 -SourceHost "HV-SOURCE01" -DestinationHost "HV-DEST01" -VMNames @("VM1", "VM2") -LogPath "D:\Logs\Migration.log"
+    Custom migration operation:
+    - Specifies source and destination
+    - Migrates multiple VMs
+    - Custom log location
+#>
 
 param (
     [Parameter(Mandatory=$false)]

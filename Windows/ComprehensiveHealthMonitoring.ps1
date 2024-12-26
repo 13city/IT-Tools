@@ -1,13 +1,138 @@
-# Comprehensive System Health Monitor and Support Guide
-# Version: 1.0
-# Last Updated: 2024-12-24
-#
-# This script provides:
-# 1. System health monitoring
-# 2. Early warning detection
-# 3. Detailed troubleshooting steps
-# 4. Slack and email alerting
-# 5. Support guidance for resolution
+<# 
+.SYNOPSIS
+    Enterprise-grade system health monitoring and proactive maintenance toolkit.
+
+.DESCRIPTION
+    Advanced system monitoring and maintenance solution providing:
+    - Real-time system health metrics monitoring (CPU, Memory, Disk, Network)
+    - Predictive analytics for potential system issues
+    - Automated troubleshooting and diagnostics
+    - Multi-channel alerting (Slack, Email, Teams)
+    - Intelligent support guidance generation
+    - Comprehensive performance reporting
+    - Historical trend analysis and forecasting
+    - Automated log aggregation and analysis
+    - Resource utilization optimization
+    - Service availability monitoring
+    - Security compliance checking
+    - Backup status verification
+    - Network connectivity testing
+    - Windows Update status tracking
+    - Application performance monitoring
+    - Custom threshold management
+    - Automated remediation capabilities
+
+.NOTES
+    Author: 13city
+    Compatible with: Windows Server 2012 R2, 2016, 2019, 2022, Windows 10/11
+    Requirements:
+    - Administrative rights
+    - PowerShell 5.1 or higher
+    - CimCmdlets module
+    - Microsoft.PowerShell.Diagnostics module
+    - Write access to log directories
+    - Slack webhook URL
+    - SMTP server access (for email alerts)
+    - .NET Framework 4.7.2 or higher
+    - Performance Monitor access
+    - Event Log access
+    - Network monitoring capabilities
+    - WMI/CIM access rights
+    - Remote management enabled (optional)
+
+.PARAMETER SlackWebhook
+    Slack webhook URL for alert notifications
+    Required for Slack integration
+    Format: https://hooks.slack.com/services/xxx
+    Supports multiple channels via comma-separation
+
+.PARAMETER EmailRecipient
+    Email addresses for monitoring alerts
+    Optional: Disable email alerts if not provided
+    Supports multiple recipients (comma-separated)
+    Format: "admin@company.com, support@company.com"
+
+.PARAMETER SmtpServer
+    SMTP server for email alert delivery
+    Default: smtp.company.com
+    Requires: Network connectivity to SMTP server
+    Optional: Authentication credentials
+
+.PARAMETER LogPath
+    Directory for monitoring logs storage
+    Default: C:\ProgramData\ITMonitoring\Logs
+    Creates directory if not exists
+    Maintains rolling log history
+
+.PARAMETER ReportPath
+    Location for health report storage
+    Default: C:\ProgramData\ITMonitoring\Reports
+    Creates directory if not exists
+    Supports HTML and PDF formats
+
+.PARAMETER DiskSpaceThreshold
+    Free space warning threshold
+    Default: 15 percent
+    Range: 1-50 percent
+    Triggers: Warning at threshold, Critical at half
+
+.PARAMETER CpuThreshold
+    CPU utilization warning threshold
+    Default: 85 percent
+    Range: 50-95 percent
+    Measured: Average over 5 minutes
+
+.PARAMETER MemoryThreshold
+    Memory usage warning threshold
+    Default: 90 percent
+    Range: 60-95 percent
+    Includes: Page file usage
+
+.PARAMETER EventLogDays
+    Event log analysis period
+    Default: 3 days
+    Range: 1-30 days
+    Impacts: Report size and processing time
+
+.PARAMETER MonitoringInterval
+    Frequency of health checks
+    Default: 5 minutes
+    Range: 1-60 minutes
+    Affects: Resource usage and alert frequency
+
+.PARAMETER RetentionDays
+    Log and report retention period
+    Default: 30 days
+    Range: 1-365 days
+    Automatic cleanup of old files
+
+.EXAMPLE
+    .\ComprehensiveHealthMonitoring.ps1 -SlackWebhook "https://hooks.slack.com/services/xxx" -EmailRecipient "admin@company.com"
+    Full monitoring deployment:
+    - Enables Slack and email alerts
+    - Uses default thresholds
+    - Standard logging and reporting
+    - Real-time monitoring
+    - Automated issue detection
+
+.EXAMPLE
+    .\ComprehensiveHealthMonitoring.ps1 -SlackWebhook "https://hooks.slack.com/services/xxx" -DiskSpaceThreshold 20 -CpuThreshold 80 -MonitoringInterval 10
+    Custom monitoring configuration:
+    - Custom resource thresholds
+    - 10-minute check interval
+    - Slack notifications only
+    - Enhanced disk monitoring
+    - Reduced alert frequency
+
+.EXAMPLE
+    .\ComprehensiveHealthMonitoring.ps1 -EmailRecipient "team@company.com" -RetentionDays 60 -EventLogDays 7
+    Extended monitoring setup:
+    - Email notifications only
+    - 60-day data retention
+    - Week-long event analysis
+    - Default resource thresholds
+    - Standard monitoring interval
+#>
 
 param(
     [Parameter(Mandatory=$true)]

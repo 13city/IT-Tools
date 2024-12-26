@@ -1,0 +1,35 @@
+# Performance Monitor Configuration Template
+# Copy this file to perf_monitor_config and modify as needed
+
+# Collection settings
+INTERVAL=5                  # Collection interval in seconds
+COUNT=1                     # Number of collections to perform
+
+# Performance thresholds
+CPU_THRESHOLD=80            # CPU usage threshold percentage
+MEM_THRESHOLD=80           # Memory usage threshold percentage
+LOAD_THRESHOLD=5           # System load threshold
+
+# Notification settings
+SLACK_WEBHOOK_URL=""       # Webhook URL for Slack notifications
+EMAIL_RECIPIENT=""         # Email address for notifications
+
+# Network interface to monitor (default: eth0)
+NETWORK_INTERFACE="eth0"
+
+# Logging configuration
+LOG_DIR="../logs"          # Directory for log files
+LOG_RETENTION_DAYS=7       # Number of days to keep log files
+
+# Color settings for output (ANSI color codes)
+COLOR_ENABLED=true         # Set to false to disable colored output
+COLOR_WARNING='\033[1;33m' # Yellow
+COLOR_ERROR='\033[0;31m'   # Red
+COLOR_SUCCESS='\033[0;32m' # Green
+COLOR_INFO='\033[0;34m'    # Blue
+
+# Advanced settings
+DISK_IO_INTERVAL=1         # Interval for disk I/O measurements
+DISK_IO_COUNT=2           # Number of disk I/O measurements to average
+ENABLE_DETAILED_CPU=false  # Enable per-core CPU monitoring
+ENABLE_PROCESS_STATS=false # Enable top process statistics

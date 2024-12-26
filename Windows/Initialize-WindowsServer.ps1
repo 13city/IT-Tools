@@ -1,15 +1,95 @@
-<#
+<# 
 .SYNOPSIS
-    Automates the initial setup of a new Windows Server.
+    Automated Windows Server initialization and configuration system.
 
 .DESCRIPTION
-    - Sets server hostname.
-    - Configures static IP, DNS, and gateway (if desired).
-    - Installs common roles/features (e.g., File Server, .NET Framework).
-    - Creates or updates a local admin user.
+    This script provides comprehensive initial setup for new Windows Servers:
+    - Configures server hostname and network identity
+    - Sets up static IP addressing and DNS configuration
+    - Installs and configures essential server roles/features
+    - Manages local administrator accounts
+    - Implements basic security configurations
+    - Provides detailed operation logging
+    - Validates all configuration changes
+    - Supports both physical and virtual environments
+    - Ensures consistent server setup process
 
 .NOTES
+    Author: 13city
     Compatible with: Windows Server 2016, 2019, 2022
+    Requirements:
+    - Administrative rights
+    - Network connectivity
+    - PowerShell 5.1 or higher
+    - Write access to C:\Logs
+    - Valid network configuration details
+    - Server restart capability
+
+.PARAMETER NewHostname
+    New server hostname to be configured
+    Required: Yes
+    Format: NetBIOS-compatible name
+    Example: "PROD-SVR01"
+
+.PARAMETER LocalAdminUser
+    Local administrator account to create/update
+    Required: Yes
+    Format: Valid Windows username
+    Example: "LocalAdmin"
+
+.PARAMETER LocalAdminPassword
+    Password for local administrator account
+    Required: Yes
+    Must meet complexity requirements
+    Stored securely during execution
+
+.PARAMETER ConfigureStaticIP
+    Switch to enable static IP configuration
+    Default: False
+    Optional: Use for static IP setup
+
+.PARAMETER IPAddress
+    Static IP address to configure
+    Default: "192.168.1.100"
+    Required if ConfigureStaticIP is true
+
+.PARAMETER SubnetMask
+    Subnet mask for network configuration
+    Default: "255.255.255.0"
+    Required if ConfigureStaticIP is true
+
+.PARAMETER Gateway
+    Default gateway address
+    Default: "192.168.1.1"
+    Required if ConfigureStaticIP is true
+
+.PARAMETER DnsServer
+    Primary DNS server address
+    Default: "192.168.1.10"
+    Required if ConfigureStaticIP is true
+
+.EXAMPLE
+    .\Initialize-WindowsServer.ps1 -NewHostname "PROD-SVR01" -LocalAdminUser "LocalAdmin" -LocalAdminPassword "SecurePass123!"
+    Basic server setup:
+    - Sets hostname to PROD-SVR01
+    - Creates/updates local admin
+    - Uses DHCP networking
+    - Installs default roles
+
+.EXAMPLE
+    .\Initialize-WindowsServer.ps1 -NewHostname "DB-SVR01" -LocalAdminUser "SQLAdmin" -LocalAdminPassword "SecurePass123!" -ConfigureStaticIP -IPAddress "10.0.0.100" -SubnetMask "255.255.255.0" -Gateway "10.0.0.1" -DnsServer "10.0.0.10"
+    Advanced server setup:
+    - Configures static IP addressing
+    - Custom admin account
+    - Full network configuration
+    - Installs all required roles
+
+.EXAMPLE
+    .\Initialize-WindowsServer.ps1 -NewHostname "WEB-SVR01" -LocalAdminUser "WebAdmin" -LocalAdminPassword "SecurePass123!" -ConfigureStaticIP
+    Mixed configuration:
+    - Uses custom hostname
+    - Static IP with defaults
+    - Specialized admin account
 #>
 
 param(

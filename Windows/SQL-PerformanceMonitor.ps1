@@ -1,5 +1,115 @@
-# SQL Server Performance and Health Monitor
-# This script monitors SQL Server performance metrics, health status, and generates alerts
+<#
+.SYNOPSIS
+    Advanced SQL Server performance monitoring and health analytics toolkit.
+
+.DESCRIPTION
+    This script provides comprehensive SQL Server monitoring capabilities:
+    - Performance Monitoring:
+      * Real-time CPU utilization tracking
+      * Memory usage and buffer cache analysis
+      * Batch request monitoring
+      * Page life expectancy tracking
+      * Blocking detection and analysis
+    - Health Analytics:
+      * Database status verification
+      * Index fragmentation assessment
+      * Backup status monitoring
+      * Job execution tracking
+      * Version and edition validation
+    - Reporting Features:
+      * Detailed HTML performance reports
+      * Real-time metric visualization
+      * Historical trend analysis
+      * Custom threshold alerts
+      * Job status summaries
+    - Alert Management:
+      * CPU threshold monitoring
+      * Memory utilization alerts
+      * Blocking detection notifications
+      * Backup status warnings
+      * Critical condition reporting
+
+.NOTES
+    Author: 13city
+    
+    Compatible with:
+    - SQL Server 2016+
+    - Windows Server 2012 R2+
+    - PowerShell 5.1+
+    
+    Requirements:
+    - SqlServer PowerShell module
+    - SQL Server Management Tools
+    - Sysadmin or appropriate monitoring rights
+    - Write access to report directory
+    - Network connectivity to SQL instances
+
+.PARAMETER ServerInstance
+    SQL Server instance name
+    Default: "." (local)
+    Format: ServerName\InstanceName
+    Example: SQLSERVER01\PROD
+
+.PARAMETER DatabaseName
+    Target database name
+    Default: "*" (all databases)
+    Supports wildcards
+    Filters monitoring scope
+
+.PARAMETER ReportPath
+    HTML report output path
+    Default: Desktop\SQL-HealthReport.html
+    Creates parent directories
+    Requires write permissions
+
+.PARAMETER AlertThresholdCPU
+    CPU usage alert threshold
+    Default: 80 (percent)
+    Range: 0-100
+    Triggers warning alerts
+
+.PARAMETER AlertThresholdMemory
+    Memory usage alert threshold
+    Default: 85 (percent)
+    Range: 0-100
+    Triggers warning alerts
+
+.PARAMETER MonitoringDuration
+    Duration of monitoring in minutes
+    Default: 60 minutes
+    Range: 1-1440
+    Affects data collection period
+
+.PARAMETER SampleInterval
+    Seconds between metric samples
+    Default: 5 seconds
+    Range: 1-3600
+    Controls monitoring granularity
+
+.EXAMPLE
+    .\SQL-PerformanceMonitor.ps1
+    Basic monitoring with defaults:
+    - Local SQL instance
+    - All databases
+    - Default thresholds
+    - 60-minute duration
+
+.EXAMPLE
+    .\SQL-PerformanceMonitor.ps1 -ServerInstance "SQLSERVER01\PROD" -DatabaseName "CustomerDB" -MonitoringDuration 120
+    Targeted monitoring:
+    - Specific server/database
+    - Extended duration
+    - Default thresholds
+    - Standard sampling
+
+.EXAMPLE
+    .\SQL-PerformanceMonitor.ps1 -AlertThresholdCPU 70 -AlertThresholdMemory 80 -SampleInterval 10 -ReportPath "D:\Reports\SQLHealth.html"
+    Custom threshold monitoring:
+    - Lower alert thresholds
+    - Custom sampling interval
+    - Specific report location
+    - All databases included
+#>
 
 param (
     [Parameter(Mandatory=$false)]

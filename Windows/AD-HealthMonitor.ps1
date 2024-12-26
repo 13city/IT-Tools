@@ -1,5 +1,79 @@
-# Active Directory Health Monitor and Maintenance Script
-# This script performs comprehensive AD health checks and maintenance tasks
+<# 
+.SYNOPSIS
+    Active Directory Health Monitor and Maintenance Script.
+
+.DESCRIPTION
+    This script:
+    - Performs comprehensive AD health checks
+    - Tests DC connectivity and critical services
+    - Checks AD replication status
+    - Monitors FSMO roles
+    - Validates DNS health
+    - Checks AD database and log files
+    - Identifies account issues (expired, locked, inactive)
+    - Monitors Group Policy status
+    - Generates detailed HTML report
+    - Optionally fixes common issues
+
+.NOTES
+    Author: 13city
+    Compatible with: Windows Server 2012 R2, 2016, 2019, 2022
+    Requirements:
+    - ActiveDirectory PowerShell module
+    - Domain Controller role
+    - Enterprise Admin or Domain Admin rights
+    - Write access to report directory
+    - DNS Server role (for DNS health checks)
+
+.PARAMETER DomainController
+    Target Domain Controller for health checks
+    Example: "DC01.contoso.local"
+    Default: Local computer name
+
+.PARAMETER ReportPath
+    Full path where HTML report will be saved
+    Example: "C:\Reports\ADHealth.html"
+    Default: Desktop\AD-HealthReport.html
+
+.PARAMETER MaxPasswordAge
+    Maximum allowed password age in days for account compliance checks
+    Used to identify accounts approaching password expiration
+    Default: 90 days
+
+.PARAMETER InactiveDays
+    Number of days without logon to consider an account inactive
+    Used for dormant account detection and reporting
+    Default: 30 days
+
+.PARAMETER FixIssues
+    Switch to automatically fix common issues found during health check
+    Includes: Unlocking accounts, enabling disabled accounts
+    Default: False (report only, no automatic fixes)
+
+.EXAMPLE
+    .\AD-HealthMonitor.ps1
+    Runs health check on local Domain Controller with default settings:
+    - Uses local computer as Domain Controller
+    - Saves report to Desktop
+    - Reports issues without fixing them
+    - Uses default thresholds for password age and inactive accounts
+
+.EXAMPLE
+    .\AD-HealthMonitor.ps1 -DomainController "DC01.contoso.local" -ReportPath "D:\Reports\ADHealth.html" -FixIssues
+    Runs comprehensive health check with custom settings:
+    - Targets specific Domain Controller
+    - Saves report to custom location
+    - Automatically fixes common issues
+    - Uses default thresholds
+
+.EXAMPLE
+    .\AD-HealthMonitor.ps1 -MaxPasswordAge 60 -InactiveDays 45
+    Runs health check with custom compliance thresholds:
+    - Flags passwords older than 60 days
+    - Identifies accounts inactive for 45+ days
+    - Uses local computer as Domain Controller
+    - Reports issues without fixing them
+#>
 
 param (
     [Parameter(Mandatory=$false)]

@@ -1,4 +1,54 @@
-# Requires -RunAsAdministrator
+<# 
+.SYNOPSIS
+    Advanced Intune and Windows management state analysis and remediation toolkit.
+
+.DESCRIPTION
+    This script provides comprehensive system management state analysis:
+    - Validates drive ownership and permissions
+    - Checks BitLocker encryption status
+    - Verifies Intune enrollment state
+    - Analyzes Azure AD join status
+    - Examines provisioning packages
+    - Tests drive write capabilities
+    - Provides detailed logging
+    - Suggests remediation steps
+    - Monitors management extensions
+    - Validates security configurations
+
+.NOTES
+    Author: 13city
+    Compatible with: Windows 10/11, Windows Server 2016-2022
+    Requirements:
+    - Administrative rights
+    - PowerShell 5.1 or higher
+    - Write access to C:\Windows\Temp
+    - Network connectivity for Azure AD checks
+    - BitLocker PowerShell module
+    - DISM capabilities
+
+.PARAMETER None
+    This script does not accept parameters but requires administrative privileges
+    Automatically analyzes all fixed drives except C:
+    Creates timestamped logs in C:\Windows\Temp
+
+.EXAMPLE
+    .\IntuneWindowsStateManagement.ps1
+    Full system analysis:
+    - Checks all non-system drives
+    - Validates management state
+    - Generates detailed report
+    - Provides remediation steps
+
+.EXAMPLE
+    powershell.exe -ExecutionPolicy Bypass -File IntuneWindowsStateManagement.ps1
+    Bypass execution run:
+    - Ensures script execution
+    - Full system analysis
+    - Comprehensive logging
+#>
+
+#Requires -Version 5.1
+#Requires -RunAsAdministrator
 
 # Error handling and logging setup
 $ErrorActionPreference = "Continue"

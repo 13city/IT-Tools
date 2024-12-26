@@ -2,50 +2,152 @@
 
 <#
 .SYNOPSIS
-    Validates Datto backup jobs and performs test restores using Datto API.
+    Enterprise-grade Datto BCDR validation and automated testing toolkit.
 
 .DESCRIPTION
-    This script:
-    - Connects to Datto API
-    - Verifies backup status for all protected systems
-    - Performs test virtualizations
-    - Validates backup integrity
-    - Sends notifications via email or Slack
-    - Generates detailed validation reports
+    Advanced Datto backup validation and testing solution providing:
+    - Comprehensive backup status verification
+    - Automated test virtualizations
+    - Backup integrity validation
+    - Multi-channel alerting (Email, Slack, Teams)
+    - Detailed HTML reporting with metrics
+    - Real-time monitoring and notifications
+    - Backup chain verification
+    - Screenshot verification integration
+    - Recovery point validation
+    - Network isolation testing
+    - Performance metrics collection
+    - Compliance reporting
+    - Historical trend analysis
+    - Error pattern detection
+    - Automated remediation options
+    - SLA compliance checking
+    - Capacity monitoring
+    - Agent health verification
+    - Custom threshold management
+    - Backup retention validation
+
+.NOTES
+    Author: 13city
+    Compatible with: Windows Server 2012 R2, 2016, 2019, 2022
+    Requirements:
+    - PowerShell 5.1 or higher
+    - Datto API credentials
+    - Network connectivity to Datto API
+    - SMTP server access (for email notifications)
+    - Write access to log directory
+    - .NET Framework 4.7.2 or higher
+    - TLS 1.2 support
+    - Sufficient memory for virtualization tests
+    - Network bandwidth for API operations
+    - Access to Datto Partner Portal
+    - PowerShell WebRequest module
 
 .PARAMETER DattoApiKey
-    Datto API key for authentication
+    Datto API authentication key
+    Required: Yes
+    Format: Base64 string
+    Obtain: Datto Partner Portal
+    Permissions: Full API access
+    Security: Store securely
 
 .PARAMETER DattoSecretKey
-    Datto API secret key
+    API secret for request signing
+    Required: Yes
+    Format: Base64 string
+    Obtain: Datto Partner Portal
+    Security: Never expose
+    Rotation: 90 days recommended
 
 .PARAMETER NotificationMethod
-    Email or Slack for notifications
+    Alert delivery mechanism
+    Required: Yes
+    Options: "Email", "Slack"
+    Default: None
+    Multiple: Not supported
 
 .PARAMETER EmailTo
-    Email recipients for notifications
+    Notification recipient(s)
+    Required: If Email method
+    Format: RFC 5322 email
+    Multiple: Comma-separated
+    Example: "admin@company.com"
 
 .PARAMETER EmailFrom
-    From address for email notifications
+    Notification sender address
+    Required: If Email method
+    Format: RFC 5322 email
+    Must be: Authorized sender
+    Example: "datto@company.com"
 
 .PARAMETER SmtpServer
-    SMTP server for email notifications
+    Email relay server
+    Required: If Email method
+    Format: FQDN or IP
+    Ports: 25, 465, 587
+    Auth: If required
 
 .PARAMETER SlackWebhook
-    Slack webhook URL for notifications
+    Slack integration URL
+    Required: If Slack method
+    Format: HTTPS URL
+    Obtain: Slack workspace
+    Security: Keep private
 
 .PARAMETER TestVirtualizationEnabled
-    Enable/disable test virtualization functionalityComplex Network Print Environments & Dental-Specific Software
-Prompt:
-"Generate a troubleshooting script for a Windows environment that diagnoses issues with networked printers and common dental office software (e.g., Dentrix, Eaglesoft). The script should check printer drivers, spooler service status, connectivity to shared drives or databases, and parse logs for known software-related errors."
+    Controls VM testing
+    Default: True
+    Type: Boolean
+    Impact: Performance
+    Resources: High
 
-Why it works:
+.PARAMETER ValidationDepth
+    Test thoroughness level
+    Optional: Yes
+    Values: Basic, Standard, Deep
+    Default: Standard
+    Impact: Runtime
 
-Targets dental-specific IT challenges like Dentrix or Eaglesoft.
-Demonstrates advanced printing and software troubleshooting.
+.PARAMETER ReportFormat
+    Output report type
+    Optional: Yes
+    Values: HTML, PDF, JSON
+    Default: HTML
+    Multiple: Allowed
+
+.PARAMETER RetentionDays
+    Report/log retention
+    Optional: Yes
+    Range: 1-365
+    Default: 30
+    Unit: Days
 
 .EXAMPLE
-    .\DattoBackupValidator.ps1 -DattoApiKey "your-api-key" -DattoSecretKey "your-secret-key" -NotificationMethod Email -EmailTo "admin@company.com"
+    .\DattoBackupValidator.ps1 -DattoApiKey "your-api-key" -DattoSecretKey "your-secret-key" -NotificationMethod Email -EmailTo "admin@company.com" -EmailFrom "datto@company.com" -SmtpServer "smtp.company.com"
+    Standard validation run:
+    - Email notifications
+    - Default testing depth
+    - HTML reporting
+    - Standard retention
+    - All agents checked
+
+.EXAMPLE
+    .\DattoBackupValidator.ps1 -DattoApiKey "your-api-key" -DattoSecretKey "your-secret-key" -NotificationMethod Slack -SlackWebhook "https://hooks.slack.com/services/xxx" -ValidationDepth Deep
+    Comprehensive validation:
+    - Slack notifications
+    - Deep testing
+    - Extended verification
+    - Performance metrics
+    - Detailed reporting
+
+.EXAMPLE
+    .\DattoBackupValidator.ps1 -DattoApiKey "your-api-key" -DattoSecretKey "your-secret-key" -NotificationMethod Email -EmailTo "admin@company.com" -TestVirtualizationEnabled $false -ReportFormat "JSON,HTML"
+    Quick validation run:
+    - Skip virtualization
+    - Multiple report formats
+    - Basic verification
+    - Email notifications
+    - Faster completion
 #>
 
 [CmdletBinding()]

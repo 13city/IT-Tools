@@ -1,9 +1,28 @@
 #!/usr/bin/env bash
+# 
+# .SYNOPSIS
+#   Parses iptables log entries for blocked traffic analysis.
 #
-# analyze_iptables_logs.sh
+# .DESCRIPTION
+#   This script:
+#   - Analyzes system logs for iptables/netfilter entries
+#   - Identifies top source IPs being blocked
+#   - Reports most frequently targeted destination ports
+#   - Logs analysis results to a specified log file
 #
-# SYNOPSIS
-#   Parses iptables log entries for blocked traffic, identifying top offending IPs and ports.
+# .NOTES
+#   Author: 13city
+#   Compatible with: Ubuntu 18.04+, RHEL/CentOS 7+, Debian 10+
+#
+# .PARAMETER LOGFILE
+#   Path where analysis results will be written
+#
+# .PARAMETER SYSLOG_PATH
+#   Path to system log file to analyze
+#
+# .EXAMPLE
+#   ./analyze_iptables_logs.sh
+#   Default analysis using /var/log/syslog and output to /var/log/iptables_analysis.log
 #
 
 LOGFILE="/var/log/iptables_analysis.log"

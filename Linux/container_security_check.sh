@@ -1,14 +1,28 @@
 #!/usr/bin/env bash
-#
-# container_security_check.sh
-#
-# SYNOPSIS
+# .SYNOPSIS
 #   Performs advanced checks on Docker or Kubernetes for security misconfigurations.
 #
-# DESCRIPTION
-#   - Checks Docker daemon config for insecure registries or disabled seccomp.
-#   - If KUBECONFIG is set, checks for pods running privileged or with host namespaces.
-#   - Logs findings to /var/log/container_security_check.log
+# .DESCRIPTION
+#   This script:
+#   - Checks Docker daemon config for insecure registries or disabled seccomp
+#   - If KUBECONFIG is set, checks for pods running privileged or with host namespaces
+#   - Logs findings to specified log file
+#
+# .NOTES
+#   Author: 13city
+#   Compatible with: Ubuntu 18.04+, RHEL/CentOS 7+, Debian 10+
+#
+# .PARAMETER LOGFILE
+#   Path where security check results will be written
+#   Default: /var/log/container_security_check.log
+#
+# .PARAMETER KUBECONFIG
+#   Path to Kubernetes configuration file (optional)
+#   Default: Uses system default KUBECONFIG if set
+#
+# .EXAMPLE
+#   ./container_security_check.sh
+#   Performs container security checks with default logging location
 #
 
 LOGFILE="/var/log/container_security_check.log"

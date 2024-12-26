@@ -1,16 +1,48 @@
 #!/usr/bin/env bash
-#
-# auto_provision.sh
 # 
-# SYNOPSIS
-#   Automates Linux server provisioning:
-#   - Configures LVM on a new disk
-#   - Creates standard users/groups
-#   - Hardens SSH config
-#   - Installs basic packages
+# .SYNOPSIS
+#   Automates Linux server provisioning and configuration.
 #
-# NOTES:
-#   Compatible with: Ubuntu/Debian, CentOS/RHEL
+# .DESCRIPTION
+#   This script:
+#   - Configures LVM storage on a new disk
+#   - Creates and configures standard user accounts
+#   - Implements SSH security hardening
+#   - Installs essential system packages
+#   - Provides detailed logging of all operations
+#
+# .NOTES
+#   Author: 13city
+#   Compatible with: Ubuntu 18.04+, RHEL/CentOS 7+, Debian 10+
+#   Requirements: Root/sudo access, available secondary disk
+#
+# .PARAMETER LOGFILE
+#   Path where provisioning logs will be written
+#   Default: /var/log/auto_provision.log
+#
+# .PARAMETER DISK
+#   Target disk for LVM configuration
+#   Default: /dev/sdb
+#
+# .PARAMETER VGNAME
+#   Name for the volume group
+#   Default: vg_data
+#
+# .PARAMETER LVNAME
+#   Name for the logical volume
+#   Default: lv_data
+#
+# .PARAMETER MOUNTPOINT
+#   Mount point for the new volume
+#   Default: /data
+#
+# .PARAMETER USERNAME
+#   Username for the new system account
+#   Default: devops
+#
+# .EXAMPLE
+#   sudo ./auto_provision.sh
+#   Provisions server with default settings
 #
 
 LOGFILE="/var/log/auto_provision.log"

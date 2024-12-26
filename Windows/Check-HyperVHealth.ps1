@@ -1,15 +1,113 @@
-# Hyper-V Health Check and Troubleshooting Script
-# Usage: .\Check-HyperVHealth.ps1 -GenerateReport -EmailRecipient "admin@company.com"
-#
-# This script checks for common Hyper-V issues and provides remediation steps:
-# 1. Resource bottlenecks (CPU, Memory, Storage, Network)
-# 2. Replication issues
-# 3. Snapshot management problems
-# 4. Storage performance
-# 5. Network connectivity
-# 6. Cluster health
-# 7. Backup status
-# 8. Event log analysis
+<# 
+.SYNOPSIS
+    Enterprise-grade Hyper-V health monitoring and diagnostics toolkit.
+
+.DESCRIPTION
+    This comprehensive health monitoring solution provides:
+    - Real-time resource utilization tracking (CPU, Memory, Storage, Network)
+    - Advanced replication health monitoring and diagnostics
+    - Intelligent snapshot management and analysis
+    - Detailed storage performance metrics and health checks
+    - Network connectivity validation and throughput analysis
+    - Cluster health assessment and failover testing
+    - Backup status verification and consistency checks
+    - Event log analysis with pattern recognition
+    - Dynamic Memory optimization checks
+    - Storage health and performance monitoring
+    - Automated issue detection and remediation
+    - Comprehensive HTML reporting with trends
+    - Email notifications for critical issues
+    - Performance baseline comparison
+    - Capacity planning recommendations
+
+.NOTES
+    Author: 13city
+    Compatible with: Windows Server 2012 R2, 2016, 2019, 2022
+    Requirements:
+    - Hyper-V role installed
+    - Administrative rights
+    - PowerShell 5.1 or higher
+    - Write access to log directory
+    - SMTP server access (if email notifications enabled)
+    - Windows Server Backup (for backup status checks)
+    - Cluster PowerShell module (for cluster checks)
+    - .NET Framework 4.7.2 or higher
+    - Performance Monitor access
+    - Event Log access
+    - Network monitoring capabilities
+
+.PARAMETER LogPath
+    Directory for detailed operation logs
+    Default: .\logs\[timestamp]-HyperV-Health.log
+    Creates timestamped log files
+    Maintains historical data
+
+.PARAMETER GenerateReport
+    Switch to enable HTML report generation
+    Creates comprehensive health assessment document
+    Includes performance graphs and trends
+    Default: False
+
+.PARAMETER FixIssues
+    Switch to enable automatic issue remediation
+    Attempts to resolve common problems
+    Logs all remediation actions
+    Default: False
+
+.PARAMETER DaysToAnalyze
+    Historical data analysis period
+    Used for trend analysis and reporting
+    Default: 7 days
+    Range: 1-90 days
+
+.PARAMETER EmailRecipient
+    Email address for report delivery
+    Supports multiple recipients (comma-separated)
+    Required for email notifications
+    Example: "admin@domain.com"
+
+.PARAMETER PerformanceThreshold
+    CPU/Memory threshold for alerts
+    Percentage that triggers warnings
+    Default: 80%
+    Range: 0-100
+
+.PARAMETER StorageThreshold
+    Free space threshold for alerts
+    Percentage that triggers warnings
+    Default: 20%
+    Range: 0-100
+
+.PARAMETER BackupAge
+    Maximum acceptable backup age
+    Days before backup warning
+    Default: 1 day
+    Range: 0-30
+
+.EXAMPLE
+    .\Check-HyperVHealth.ps1 -GenerateReport
+    Basic health assessment:
+    - Generates HTML report
+    - Uses default thresholds
+    - No automatic fixes
+    - Console output only
+
+.EXAMPLE
+    .\Check-HyperVHealth.ps1 -GenerateReport -EmailRecipient "admin@company.com" -FixIssues
+    Full monitoring solution:
+    - Generates and emails report
+    - Attempts automatic fixes
+    - Uses default thresholds
+    - Logs all actions
+
+.EXAMPLE
+    .\Check-HyperVHealth.ps1 -DaysToAnalyze 30 -PerformanceThreshold 90 -StorageThreshold 15
+    Custom threshold monitoring:
+    - 30-day analysis period
+    - 90% performance threshold
+    - 15% storage threshold
+    - No automatic fixes
+#>
 
 param(
     [Parameter(Mandatory=$false)]

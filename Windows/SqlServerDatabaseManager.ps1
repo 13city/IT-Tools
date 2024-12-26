@@ -1,14 +1,99 @@
 <#
 .SYNOPSIS
-    Creates or rebuilds a SQL Server database with optional table scripts.
+    Advanced SQL Server database deployment and management automation toolkit.
 
 .DESCRIPTION
-    - Connects to a specified SQL Server instance.
-    - Creates a new database if it doesn't exist, or drops & recreates if -Rebuild is used.
-    - Optionally runs .sql files to build tables/stored procedures.
+    This script provides comprehensive database management capabilities:
+    - Database Operations:
+      * New database creation
+      * Database rebuilding
+      * Conditional deployment
+      * Single-user mode handling
+      * Rollback management
+    - Script Execution:
+      * Table creation scripts
+      * Stored procedure deployment
+      * Index management
+      * Schema updates
+      * Data migration
+    - Safety Features:
+      * Existence checks
+      * Rebuild confirmation
+      * Error handling
+      * Transaction management
+      * Rollback procedures
+    - Deployment Options:
+      * Recursive script execution
+      * Ordered deployment
+      * Dependency management
+      * Version control
+      * Environment targeting
 
 .NOTES
-    Requires: PowerShell Invoke-Sqlcmd (SQLPS or SqlServer module)
+    Author: 13city
+    Version: 2.0
+    
+    Compatible with:
+    - SQL Server 2012+
+    - SQL Server 2014+
+    - SQL Server 2016+
+    - SQL Server 2017+
+    - SQL Server 2019+
+    
+    Requirements:
+    - PowerShell 5.1 or higher
+    - SqlServer PowerShell module
+    - Sysadmin or appropriate rights
+    - Script folder read access
+    - Database create permissions
+
+.PARAMETER SqlInstance
+    SQL Server instance name
+    Required parameter
+    Format: ServerName\InstanceName
+    Example: SQLSERVER01\PROD
+
+.PARAMETER DatabaseName
+    Target database name
+    Required parameter
+    Must be valid SQL identifier
+    Case-sensitive
+
+.PARAMETER Rebuild
+    Database rebuild switch
+    Default: False
+    Forces complete rebuild
+    Requires elevated permissions
+
+.PARAMETER ScriptFolder
+    SQL script directory path
+    Optional parameter
+    Supports recursive execution
+    Processes .sql files only
+
+.EXAMPLE
+    .\SqlServerDatabaseManager.ps1 -SqlInstance "SQLSERVER01" -DatabaseName "CustomerDB"
+    Basic database creation:
+    - Creates new database
+    - Skips if exists
+    - No script execution
+    - Default settings
+
+.EXAMPLE
+    .\SqlServerDatabaseManager.ps1 -SqlInstance "SQLSERVER01\PROD" -DatabaseName "FinanceDB" -Rebuild -ScriptFolder "D:\DBScripts"
+    Full database deployment:
+    - Forces database rebuild
+    - Executes all SQL scripts
+    - Processes recursively
+    - Handles dependencies
+
+.EXAMPLE
+    .\SqlServerDatabaseManager.ps1 -SqlInstance "." -DatabaseName "TestDB" -ScriptFolder ".\Scripts"
+    Local development setup:
+    - Uses local instance
+    - Creates test database
+    - Runs local scripts
+    - Preserves existing DB
 #>
 
 param(

@@ -1,5 +1,119 @@
-# Windows Server Performance Monitor and Optimizer
-# This script monitors server performance metrics and performs optimization tasks
+<#
+.SYNOPSIS
+    Advanced Windows Server performance monitoring and optimization toolkit.
+
+.DESCRIPTION
+    This script provides comprehensive server performance analysis and optimization:
+    - Performance Monitoring:
+      * Real-time CPU utilization tracking
+      * Memory usage analysis
+      * Disk I/O performance metrics
+      * Network bandwidth monitoring
+      * Process resource consumption
+    - System Analysis:
+      * Detailed system information gathering
+      * Disk space utilization
+      * Top resource-consuming processes
+      * Network interface statistics
+    - Optimization Features:
+      * Temporary file cleanup
+      * Service optimization
+      * Scheduled task management
+      * Windows Update cache maintenance
+    - Reporting Capabilities:
+      * HTML report generation
+      * Performance trending analysis
+      * Resource utilization graphs
+      * Critical condition alerts
+
+.NOTES
+    Author: 13city
+    
+    Compatible with:
+    - Windows Server 2012 R2
+    - Windows Server 2016
+    - Windows Server 2019
+    - Windows Server 2022
+    
+    Requirements:
+    - Administrative privileges
+    - PowerShell 5.1 or higher
+    - WMI/CIM access
+    - Performance counter access
+    - Write access to report directory
+    - Remote WMI permissions (for remote monitoring)
+
+.PARAMETER ComputerName
+    Target server name for monitoring
+    Default: Local computer
+    Accepts remote computer names
+    Requires appropriate permissions
+
+.PARAMETER ReportPath
+    Path for HTML performance report
+    Default: Desktop\Server-Performance.html
+    Creates parent directories if needed
+    Overwrites existing report
+
+.PARAMETER MonitoringMinutes
+    Duration of performance monitoring in minutes
+    Default: 60 minutes
+    Range: 1-1440 (24 hours)
+    Affects data collection detail
+
+.PARAMETER SampleInterval
+    Seconds between performance samples
+    Default: 5 seconds
+    Range: 1-3600
+    Impacts monitoring granularity
+
+.PARAMETER PerformOptimization
+    Switch to enable optimization tasks
+    Default: False
+    Requires elevated privileges
+    Performs system optimization
+
+.PARAMETER CPUThreshold
+    CPU usage percentage threshold
+    Default: 80%
+    Range: 0-100
+    Triggers warnings when exceeded
+
+.PARAMETER MemoryThreshold
+    Memory usage percentage threshold
+    Default: 85%
+    Range: 0-100
+    Triggers warnings when exceeded
+
+.PARAMETER DiskSpaceThreshold
+    Disk space usage percentage threshold
+    Default: 90%
+    Range: 0-100
+    Triggers warnings when exceeded
+
+.EXAMPLE
+    .\ServerPerformanceOptimizer.ps1
+    Basic monitoring with default settings:
+    - Monitors local server
+    - 60-minute duration
+    - 5-second intervals
+    - No optimization
+
+.EXAMPLE
+    .\ServerPerformanceOptimizer.ps1 -ComputerName "SERVER01" -MonitoringMinutes 120 -PerformOptimization
+    Advanced monitoring with optimization:
+    - Monitors remote server
+    - 2-hour duration
+    - Includes optimization
+    - Uses default thresholds
+
+.EXAMPLE
+    .\ServerPerformanceOptimizer.ps1 -CPUThreshold 70 -MemoryThreshold 80 -DiskSpaceThreshold 85 -ReportPath "C:\Reports\ServerHealth.html"
+    Custom threshold monitoring:
+    - Lower warning thresholds
+    - Custom report location
+    - Default monitoring duration
+#>
 
 param (
     [Parameter(Mandatory=$false)]

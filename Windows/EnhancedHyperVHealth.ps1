@@ -1,12 +1,97 @@
-# Enhanced Hyper-V Health Monitor with Multi-Channel Reporting
-# # Basic usage with console output only
-# .\Monitor-HyperV.ps1
+<#
+.SYNOPSIS
+    Enhanced Hyper-V health monitoring with multi-channel reporting capabilities.
 
-# With Slack notifications
-# .\Monitor-HyperV.ps1 -SlackWebhook "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+.DESCRIPTION
+    This script:
+    - Monitors Hyper-V virtual machine health metrics
+    - Tracks CPU and memory utilization
+    - Validates VM operational status
+    - Generates detailed performance reports
+    - Provides real-time console output
+    - Sends Slack notifications for issues
+    - Creates comprehensive HTML reports
+    - Supports customizable thresholds
+    - Performs trend analysis
 
-# Generate all reports
-# .\Monitor-HyperV.ps1 -SlackWebhook "https://hooks.slack.com/services/YOUR/WEBHOOK/URL" -GenerateReport
+.NOTES
+    Author: 13city
+    Compatible with: Windows Server 2012 R2, 2016, 2019, 2022
+    Requirements:
+    - Hyper-V PowerShell module
+    - Administrative rights
+    - Network connectivity for Slack notifications
+    - Write access to log directory
+    - PowerShell 5.1 or higher
+
+.PARAMETER LogPath
+    Path where monitoring logs will be written
+    Default: .\logs\[timestamp]-HyperV-Health.log
+    Creates timestamped log files
+
+.PARAMETER SlackWebhook
+    Webhook URL for Slack notifications
+    Optional: If not provided, Slack notifications are disabled
+    Obtain from Slack workspace settings
+
+.PARAMETER GenerateReport
+    Switch to enable HTML report generation
+    Creates detailed report with metrics and charts
+    Default: False
+
+.PARAMETER ReportPath
+    Path where HTML report will be saved
+    Default: .\reports\[timestamp]-HyperV-Report.html
+    Creates timestamped report files
+
+.PARAMETER WarningThresholdCPU
+    CPU usage percentage to trigger warnings
+    Default: 80%
+    Range: 0-100
+
+.PARAMETER CriticalThresholdCPU
+    CPU usage percentage to trigger critical alerts
+    Default: 90%
+    Range: 0-100
+
+.PARAMETER WarningThresholdMemory
+    Memory usage percentage to trigger warnings
+    Default: 85%
+    Range: 0-100
+
+.PARAMETER CriticalThresholdMemory
+    Memory usage percentage to trigger critical alerts
+    Default: 95%
+    Range: 0-100
+
+.PARAMETER DaysToAnalyze
+    Number of days of history to analyze
+    Used for trend analysis and reporting
+    Default: 7 days
+
+.EXAMPLE
+    .\EnhancedHyperVHealth.ps1
+    Runs basic health monitoring with console output:
+    - Uses default thresholds
+    - Logs to default location
+    - No Slack notifications
+    - No HTML report generation
+
+.EXAMPLE
+    .\EnhancedHyperVHealth.ps1 -SlackWebhook "https://hooks.slack.com/services/xxx" -GenerateReport
+    Runs monitoring with full reporting:
+    - Sends alerts to Slack
+    - Generates HTML report
+    - Uses default thresholds
+    - Creates detailed logs
+
+.EXAMPLE
+    .\EnhancedHyperVHealth.ps1 -WarningThresholdCPU 70 -CriticalThresholdCPU 85 -DaysToAnalyze 14
+    Runs monitoring with custom thresholds:
+    - Lower CPU thresholds for earlier warnings
+    - Analyzes 14 days of history
+    - Console output only
+#>
 
 param(
     [Parameter(Mandatory=$false)]
@@ -374,4 +459,102 @@ function Export-HTMLReport {
         </div>
         
         <div class="vm-grid">
-            <h2>
+            <h2>Virtual Machine Status</h2>
+            <table>
+                <tr>
+                    <th>VM Name</th>
+                    <th>State</th>
+                    <th>CPU Usage</th>
+                    <th>Memory Usage</th>
+                    <th>Memory Assigned</th>
+                    <th>Status</th>
+                </tr>
+                $(foreach ($vm in $HealthData.VMs) {
+                    $statusClass = switch ($vm.Status) {
+                        "Critical" { "status-critical" }
+                        "Warning" { "status-warning" }
+                        default { "status-healthy" }
+                    }
+                    "<tr>
+                        <td>$($vm.Name)</td>
+                        <td>$($vm.State)</td>
+                        <td>$($vm.CPUUsage)%</td>
+                        <td>$($vm.MemoryUsage)%</td>
+                        <td>$($vm.MemoryAssigned)</td>
+                        <td><span class='status-badge $statusClass'>$($vm.Status)</span></td>
+                    </tr>"
+                })
+            </table>
+        </div>
+        
+        $(if ($HealthData.Critical) {
+            "<div class='issues-section'>
+                <h2>Critical Issues</h2>
+                <ul class='critical'>
+                    $(foreach ($issue in $HealthData.Critical) {
+                        "<li>$issue</li>"
+                    })
+                </ul>
+            </div>"
+        })
+        
+        $(if ($HealthData.Warnings) {
+            "<div class='issues-section'>
+                <h2>Warnings</h2>
+                <ul class='warning'>
+                    $(foreach ($warning in $HealthData.Warnings) {
+                        "<li>$warning</li>"
+                    })
+                </ul>
+            </div>"
+        })
+        
+        <div class="footer">
+            <p>Report generated on $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')</p>
+            <p>Monitoring thresholds: CPU Warning: $WarningThresholdCPU%, Critical: $CriticalThresholdCPU% | Memory Warning: $WarningThresholdMemory%, Critical: $CriticalThresholdMemory%</p>
+        </div>
+    </div>
+</body>
+</html>
+"@
+
+    $html | Out-File -FilePath $Path -Encoding UTF8
+    Write-FormattedOutput "HTML report exported to: $Path" -Level Success
+}
+
+# Main execution
+try {
+    # Create log directory if it doesn't exist
+    $logDir = Split-Path $LogPath -Parent
+    if (-not (Test-Path $logDir)) {
+        New-Item -ItemType Directory -Path $logDir -Force | Out-Null
+    }
+
+    Write-FormattedOutput "Starting Hyper-V health monitoring..." -Level Info
+    
+    # Get health status
+    $healthData = Get-VMHealthStatus
+    
+    # Display console report
+    Write-ConsoleReport -HealthData $healthData
+    
+    # Send Slack notification if configured
+    if ($SlackWebhook) {
+        Send-SlackReport -HealthData $healthData
+    }
+    
+    # Generate HTML report if requested
+    if ($GenerateReport) {
+        $reportDir = Split-Path $ReportPath -Parent
+        if (-not (Test-Path $reportDir)) {
+            New-Item -ItemType Directory -Path $reportDir -Force | Out-Null
+        }
+        Export-HTMLReport -HealthData $healthData -Path $ReportPath
+    }
+    
+    Write-FormattedOutput "Health monitoring completed successfully" -Level Success
+}
+catch {
+    Write-FormattedOutput "Error during health monitoring: $_" -Level Error
+    throw
+}

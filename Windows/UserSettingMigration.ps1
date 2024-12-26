@@ -1,3 +1,93 @@
+<#
+.SYNOPSIS
+    Automated user profile settings migration and backup utility.
+
+.DESCRIPTION
+    This script provides comprehensive user settings migration capabilities:
+    - Profile Management:
+      * Application settings backup
+      * User preferences migration
+      * Custom configurations transfer
+      * Profile restoration
+    - Application Settings:
+      * Browser profiles
+      * Shell preferences
+      * Application data
+      * Custom configurations
+    - Security Features:
+      * SSH key migration
+      * Credential backup
+      * Secure transfer
+      * Access validation
+    - Backup Operations:
+      * Automated backup
+      * Version control
+      * Integrity checking
+      * Restoration verification
+
+.NOTES
+    Author: 13city
+    Compatible with:
+    - Windows Server 2012 R2
+    - Windows Server 2016
+    - Windows Server 2019
+    - Windows Server 2022
+    - Windows 10/11
+    
+    Requirements:
+    - PowerShell 5.1 or higher
+    - Administrative privileges
+    - Network connectivity
+    - Share access permissions
+    - Robocopy availability
+
+.PARAMETER SourceComputer
+    Source computer name
+    Required parameter
+    Must be network accessible
+    Requires admin access
+
+.PARAMETER DestinationComputer
+    Target computer name
+    Required parameter
+    Must be network accessible
+    Requires admin access
+
+.PARAMETER Username
+    User profile to migrate
+    Required parameter
+    Must exist on source
+    Case-sensitive
+
+.PARAMETER LogPath
+    Migration log file path
+    Optional parameter
+    Default: Desktop\MigrationLog.txt
+    Records all operations
+
+.PARAMETER BackupPath
+    Settings backup location
+    Optional parameter
+    Default: Desktop\UserBackup
+    Stores temporary data
+
+.EXAMPLE
+    .\UserSettingMigration.ps1 -SourceComputer "OLD-PC" -DestinationComputer "NEW-PC" -Username "JohnDoe"
+    Basic migration:
+    - Uses default paths
+    - Migrates standard settings
+    - Creates basic logs
+    - Default backup location
+
+.EXAMPLE
+    .\UserSettingMigration.ps1 -SourceComputer "OLD-PC" -DestinationComputer "NEW-PC" -Username "JohnDoe" -LogPath "C:\Logs\Migration.log" -BackupPath "D:\Backups\JohnDoe"
+    Custom migration:
+    - Specified log location
+    - Custom backup path
+    - Full settings transfer
+    - Detailed logging
+#>
+
 param(
     [Parameter(Mandatory=$true)]
     [string]$SourceComputer,

@@ -1,29 +1,82 @@
-<# 
+<#
 .SYNOPSIS
-  Datto RMM Custom Script that performs system checks and returns structured output.
+    Advanced Datto RMM custom component for comprehensive system monitoring and reporting.
 
 .DESCRIPTION
-  - Gathers CPU, Memory, OS details.
-  - Checks service status (e.g., MSSQLSERVER).
-  - Outputs JSON for RMM ingestion.
+    This script performs extensive system analysis and monitoring:
+    - System Information Collection:
+      * Detailed CPU specifications and utilization
+      * Memory usage and availability metrics
+      * Operating system details and version
+      * Service status monitoring (MSSQLSERVER)
+    - Monitoring Features:
+      * Real-time performance metrics
+      * Service availability checks
+      * Resource utilization tracking
+    - Output Handling:
+      * Structured JSON output for RMM integration
+      * Detailed logging with timestamps
+      * Error handling and reporting
+    - Integration Capabilities:
+      * Compatible with Datto RMM policies
+      * Supports automated monitoring
+      * Enables custom alerting
+    - Execution Modes:
+      * On-demand execution support
+      * Scheduled policy-based runs
+      * Background monitoring capability
 
+.NOTES
+    Author: 13city
+    
+    Compatible with:
+    - Windows Server 2012 R2
+    - Windows Server 2016
+    - Windows Server 2019
+    - Windows Server 2022
+    - Windows 10/11
+    
+    Requirements:
+    - Administrative privileges
+    - Write access to C:\Logs directory
+    - PowerShell 5.1 or higher
+    - WMI/CIM access rights
+    - MSSQLSERVER service (optional)
+    - Network connectivity for RMM
+    
+    Exit Codes:
+    - 0: Success
+    - 1: Error during execution
 
+.OUTPUTS
+    JSON structured data containing:
+    - Hostname
+    - OS details and version
+    - CPU specifications
+    - Total RAM
+    - SQL Server status
+    Log file at C:\Logs\RMM_CustomComponent-[timestamp].log
 
-# Datto RMM Custom Script
+.EXAMPLE
+    .\RMM_CustomComponent.ps1
+    Standard execution:
+    - Performs all system checks
+    - Generates JSON output
+    - Creates timestamped log file
 
-## Overview
-A PowerShell script to collect system details (OS, CPU, Memory) and check a critical service (MSSQLSERVER). Outputs JSON that can be parsed by Datto RMM.
+.EXAMPLE
+    powershell.exe -ExecutionPolicy Bypass -File .\RMM_CustomComponent.ps1
+    Execution with bypass:
+    - Runs with elevated privileges
+    - Bypasses execution policy
+    - Suitable for automated tasks
 
-## Instructions
-1. Upload this script to Datto RMM as a custom component.
-2. Assign it to a policy or run on demand to gather system info.
-3. The script returns 0 on success, 1 on failure. 
-4. Standard output will be JSON for easy ingestion.
-
-## Log File
-- A local log file is created in C:\Logs for auditing.
-- Contains script run info and system details.
-
+.EXAMPLE
+    .\RMM_CustomComponent.ps1 > output.json
+    Execution with output redirection:
+    - Saves JSON output to file
+    - Maintains logging
+    - Useful for data collection
 #>
 
 $scriptName = "RMM_CustomComponent"

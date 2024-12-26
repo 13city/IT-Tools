@@ -3,31 +3,96 @@
 
 <#
 .SYNOPSIS
-    Enhanced security misconfiguration checker for Windows Server 2016, 2019, and 2022.
+    Enterprise-grade Windows Server security configuration analyzer and validator.
 
 .DESCRIPTION
-    Comprehensive security audit script that checks:
-    - Domain membership and local accounts
-    - Password policies and security settings
-    - Critical services and their configurations
-    - Certificate validation
-    - Windows Features status
-    - Network share permissions
-    - Scheduled tasks
-    - Local admin group membership
-    Generates detailed HTML report of findings.
+    This script provides comprehensive security validation capabilities:
+    - Domain Security:
+      * Domain membership verification
+      * Trust relationship validation
+      * Group Policy application
+      * Domain controller status
+    - Account Management:
+      * Local account auditing
+      * Password policy validation
+      * Security group membership
+      * User rights assignments
+    - Service Security:
+      * Critical service status
+      * Startup configuration
+      * Service account audit
+      * Dependencies check
+    - Certificate Management:
+      * Certificate validity
+      * Expiration monitoring
+      * Chain validation
+      * Key usage verification
+    - System Security:
+      * Windows features audit
+      * Share permissions
+      * Scheduled task review
+      * Registry permissions
+    - Reporting Features:
+      * HTML report generation
+      * Risk assessment
+      * Remediation guidance
+      * Compliance status
+
+.NOTES
+    Author: 13city
+    Compatible with:
+    - Windows Server 2016
+    - Windows Server 2019
+    - Windows Server 2022
+    - All service packs
+    - All security updates
+    
+    Requirements:
+    - PowerShell 5.1 or higher
+    - Administrative privileges
+    - Domain admin rights (if domain-joined)
+    - Certificate access rights
+    - Share permissions
 
 .PARAMETER LogPath
-    Path where logs and reports will be stored
+    Report storage location
+    Optional parameter
+    Default: C:\SecurityLogs
+    Creates if missing
 
 .PARAMETER GenerateHTML
-    Switch to generate HTML report (default: true)
+    HTML report creation
+    Optional parameter
+    Default: True
+    Creates detailed report
 
 .PARAMETER IncludeCertificates
-    Switch to include certificate validation (default: true)
+    Certificate validation
+    Optional parameter
+    Default: True
+    Checks all stores
 
 .PARAMETER CheckShares
-    Switch to audit network shares (default: true)
+    Share permission audit
+    Optional parameter
+    Default: True
+    Validates access
+
+.EXAMPLE
+    .\WinServerSecurityCheck.ps1
+    Basic security scan:
+    - Default logging
+    - HTML reporting
+    - Certificate checks
+    - Share validation
+
+.EXAMPLE
+    .\WinServerSecurityCheck.ps1 -LogPath "D:\Audits" -GenerateHTML $false -IncludeCertificates $false
+    Custom audit:
+    - Specified log path
+    - Console output only
+    - Skip certificates
+    - Basic share checks
 #>
 
 param(

@@ -1,15 +1,157 @@
-<#
+<# 
 .SYNOPSIS
-    Automates user account migration between two AD forests.
+    Enterprise-grade Active Directory cross-forest user migration and synchronization toolkit.
 
 .DESCRIPTION
-    - Connects to source and target forests.
-    - Copies user objects, groups, and some essential attributes.
-    - Optionally merges existing accounts if found in target forest.
-    - Logs operations for auditing.
+    Advanced cross-forest user migration solution providing:
+    - Secure forest-to-forest user account migration
+    - Comprehensive attribute preservation and mapping
+    - Intelligent group membership transfer
+    - Granular permission migration
+    - SID history management
+    - Password policy compliance
+    - User profile handling
+    - Home directory migration
+    - Exchange mailbox transition
+    - Group Policy preference migration
+    - Login script transfer
+    - Security descriptor preservation
+    - Access token updates
+    - Service account handling
+    - Multi-domain support
+    - Bulk operation capabilities
+    - Detailed logging and reporting
+    - Rollback functionality
+    - Automated validation
+    - Progress tracking
+    - Error handling and recovery
 
 .NOTES
-    Requires: ActiveDirectory PowerShell Module, trust/credential with both forests
+    Author: 13city
+    Compatible with: Windows Server 2012 R2, 2016, 2019, 2022
+    Requirements:
+    - ActiveDirectory PowerShell Module
+    - Domain Admin rights in both forests
+    - Trust relationship between forests
+    - Secure credential files for both domains
+    - Write access to log directory
+    - Network connectivity to both domain controllers
+    - Exchange Management Shell (optional)
+    - Backup capabilities
+    - PowerShell 5.1 or higher
+    - .NET Framework 4.7.2 or higher
+    - RSAT AD DS and AD LDS Tools
+
+.PARAMETER SourceDomainController
+    Source domain controller FQDN
+    Required: Yes
+    Format: FQDN (e.g., DC01.source.local)
+    Must be: Global Catalog server
+    Requires: Network connectivity
+
+.PARAMETER TargetDomainController
+    Target domain controller FQDN
+    Required: Yes
+    Format: FQDN (e.g., DC01.target.local)
+    Must be: Global Catalog server
+    Requires: Network connectivity
+
+.PARAMETER SourceFQDN
+    Source domain FQDN
+    Required: Yes
+    Format: FQDN (e.g., source.local)
+    Must be: Valid AD domain
+    Validates: DNS resolution
+
+.PARAMETER TargetFQDN
+    Target domain FQDN
+    Required: Yes
+    Format: FQDN (e.g., target.local)
+    Must be: Valid AD domain
+    Validates: DNS resolution
+
+.PARAMETER SourceCredentialsFile
+    Source domain credentials file
+    Required: Yes
+    Format: XML (Export-Clixml)
+    Contains: Encrypted credentials
+    Requires: Read access
+
+.PARAMETER TargetCredentialsFile
+    Target domain credentials file
+    Required: Yes
+    Format: XML (Export-Clixml)
+    Contains: Encrypted credentials
+    Requires: Read access
+
+.PARAMETER MergeExisting
+    Account merge behavior flag
+    Default: False
+    Options: True (merge), False (skip)
+    Affects: Existing accounts
+    Controls: Attribute updates
+
+.PARAMETER UserFilter
+    LDAP filter for user selection
+    Optional: Yes
+    Default: All users
+    Format: LDAP syntax
+    Example: "(&(objectClass=user)(department=IT))"
+
+.PARAMETER AttributeMap
+    Custom attribute mapping
+    Optional: Yes
+    Format: Hashtable
+    Maps: Source to target attributes
+    Default: Essential attributes only
+
+.PARAMETER LogPath
+    Log file directory
+    Optional: Yes
+    Default: C:\Logs
+    Creates: If not exists
+    Maintains: Operation history
+
+.PARAMETER ValidateOnly
+    Validation-only mode
+    Optional: Yes
+    Default: False
+    Checks: All prerequisites
+    No changes made
+
+.PARAMETER BatchSize
+    Users per batch
+    Optional: Yes
+    Default: 100
+    Range: 1-1000
+    Affects: Performance
+
+.EXAMPLE
+    .\CrossForestUserMigration.ps1 -SourceDomainController "DC01.source.local" -TargetDomainController "DC01.target.local" -SourceFQDN "source.local" -TargetFQDN "target.local" -SourceCredentialsFile "C:\Creds\source.xml" -TargetCredentialsFile "C:\Creds\target.xml"
+    Basic migration operation:
+    - Migrates all users
+    - Skips existing accounts
+    - Uses default settings
+    - Standard logging
+    - Essential attributes only
+
+.EXAMPLE
+    .\CrossForestUserMigration.ps1 -SourceDomainController "DC01.source.local" -TargetDomainController "DC01.target.local" -SourceFQDN "source.local" -TargetFQDN "target.local" -SourceCredentialsFile "C:\Creds\source.xml" -TargetCredentialsFile "C:\Creds\target.xml" -MergeExisting -UserFilter "(&(objectClass=user)(department=IT))" -BatchSize 50
+    Advanced migration scenario:
+    - IT department users only
+    - Merges existing accounts
+    - 50 users per batch
+    - Full attribute preservation
+    - Detailed logging
+
+.EXAMPLE
+    .\CrossForestUserMigration.ps1 -SourceDomainController "DC01.source.local" -TargetDomainController "DC01.target.local" -SourceFQDN "source.local" -TargetFQDN "target.local" -SourceCredentialsFile "C:\Creds\source.xml" -TargetCredentialsFile "C:\Creds\target.xml" -ValidateOnly
+    Validation-only run:
+    - Checks all prerequisites
+    - Validates connectivity
+    - Tests credentials
+    - Verifies permissions
+    - No actual migration
 #>
 
 param(

@@ -1,15 +1,52 @@
-<#
+<# 
 .SYNOPSIS
-   Checks for specific hotfixes on remote servers and optionally installs them.
+    Checks for specific hotfixes on remote servers and optionally installs them.
 
 .DESCRIPTION
-   - Queries WMI for installed hotfixes on multiple servers.
-   - Compares against a required list of KBs.
-   - Creates a compliance report.
-   - Can optionally attempt to install missing hotfixes (requires a path or WSUS approach).
+    This script:
+    - Queries WMI for installed hotfixes on multiple servers
+    - Compares against a required list of KBs
+    - Creates detailed compliance reports
+    - Optionally installs missing hotfixes
+    - Supports both local paths and WSUS for hotfix sources
+    - Provides detailed logging of all operations
+    - Handles multiple servers simultaneously
+    - Reports success/failure for each operation
 
 .NOTES
-   Requires: PSRemoting, valid credentials
+    Author: 13city
+    Compatible with: Windows Server 2012 R2, 2016, 2019, 2022, Windows 10/11
+    Requirements:
+    - PowerShell remoting enabled on target servers
+    - Administrative credentials
+    - Network access to target servers
+    - Write access to log directory
+    - Optional: Access to hotfix source path
+
+.PARAMETER Servers
+    Array of server names to check for hotfix compliance
+    Example: @("Server1", "Server2", "Server3")
+
+.PARAMETER RequiredKBs
+    Array of required KB numbers to check for
+    Example: @("KB5005033", "KB5005565")
+
+.PARAMETER InstallMissing
+    Switch to enable automatic installation of missing hotfixes
+    Default: $false
+
+.PARAMETER HotfixSourcePath
+    Path to directory containing hotfix files (.msu)
+    Required if InstallMissing is enabled
+    Example: "\\FileServer\Hotfixes"
+
+.EXAMPLE
+    .\HotfixComplianceChecker.ps1 -Servers "Server1","Server2" -RequiredKBs "KB5005033","KB5005565"
+    Checks specified servers for required hotfixes and generates report
+
+.EXAMPLE
+    .\HotfixComplianceChecker.ps1 -Servers "Server1" -RequiredKBs "KB5005033" -InstallMissing -HotfixSourcePath "\\Server\Share\Hotfixes"
+    Checks server for hotfix and attempts to install if missing
 #>
 
 param(

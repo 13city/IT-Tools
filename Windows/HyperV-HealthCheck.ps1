@@ -1,5 +1,62 @@
-# HyperV Health Check Script
-# This script performs comprehensive health checks on Hyper-V hosts and VMs
+<# 
+.SYNOPSIS
+    Comprehensive Hyper-V health monitoring and reporting system.
+
+.DESCRIPTION
+    This script performs comprehensive health checks on Hyper-V hosts and VMs:
+    - Monitors Hyper-V service status
+    - Checks VM operational health and performance
+    - Validates storage health and VHD status
+    - Analyzes network configuration and performance
+    - Reviews critical event logs
+    - Generates detailed HTML reports
+    - Tracks historical performance data
+
+.NOTES
+    Author: 13city
+    Compatible with: Windows Server 2012 R2, 2016, 2019, 2022
+    Requirements:
+    - Hyper-V PowerShell module
+    - Administrative rights
+    - Write access to report directory
+    - PowerShell 5.1 or higher
+
+.PARAMETER VMHost
+    Target Hyper-V host for health checks
+    Default: Local computer name
+    Example: "HyperV-Host01"
+
+.PARAMETER ReportPath
+    Path where HTML report will be saved
+    Default: Desktop\HyperV-HealthReport.html
+    Creates timestamped HTML report
+
+.PARAMETER DaysToAnalyze
+    Number of days of event logs to analyze
+    Default: 7 days
+    Range: 1-30 days
+
+.EXAMPLE
+    .\HyperV-HealthCheck.ps1
+    Runs health check with default settings:
+    - Checks local Hyper-V host
+    - Saves report to desktop
+    - Analyzes last 7 days of events
+
+.EXAMPLE
+    .\HyperV-HealthCheck.ps1 -VMHost "HV-HOST01" -ReportPath "D:\Reports\HyperV-Health.html" -DaysToAnalyze 14
+    Runs health check with custom settings:
+    - Targets specific Hyper-V host
+    - Saves report to custom location
+    - Analyzes 14 days of events
+
+.EXAMPLE
+    .\HyperV-HealthCheck.ps1 -DaysToAnalyze 30
+    Runs extended health analysis:
+    - Checks local Hyper-V host
+    - Default report location
+    - Analyzes full 30 days of events
+#>
 
 param (
     [Parameter(Mandatory=$false)]

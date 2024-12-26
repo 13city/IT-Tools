@@ -1,0 +1,25 @@
+# Configuration template for service_monitor.sh
+# List one service per line, excluding comments and empty lines
+# Copy this file to services.conf and modify with your services
+
+# Web server
+#httpd
+#nginx
+
+# Database
+#mysqld
+#postgresql
+
+# Application servers
+#php-fpm
+#tomcat
+
+# Cache and message queues
+#redis
+#memcached
+
+# Load balancers
+#haproxy
+#nginx
+
+# Additional services can be added here

@@ -2,29 +2,100 @@
 
 <#
 .SYNOPSIS
-    Audits SonicWALL firewall configurations and generates compliance reports.
+    Advanced SonicWALL firewall configuration auditing and security compliance reporting tool.
 
 .DESCRIPTION
-    This script connects to SonicWALL firewall API to:
-    - Retrieve access rules, NAT policies, and VPN configurations
-    - Identify redundant or conflicting rules
-    - Check against security best practices
-    - Generate HTML/CSV reports for review
+    This script performs comprehensive SonicWALL firewall analysis and reporting:
+    - Configuration Analysis:
+      * Access rules evaluation
+      * NAT policies review
+      * VPN configuration assessment
+      * Security best practices validation
+    - Security Auditing:
+      * Rule conflict detection
+      * Redundant rule identification
+      * High-risk port usage analysis
+      * Zone security assessment
+    - Compliance Checking:
+      * Policy documentation verification
+      * Rule age monitoring
+      * Source restriction validation
+      * Zone restriction compliance
+    - Reporting Features:
+      * Detailed HTML reports with severity indicators
+      * CSV export for data analysis
+      * Configuration summaries
+      * Risk assessments
+
+.NOTES
+    Author: 13city
+    
+    Compatible with:
+    - SonicWALL SonicOS 6.x and later
+    - SonicWALL NSA Series
+    - SonicWALL TZ Series
+    - SonicWALL SOHO Series
+    
+    Requirements:
+    - PowerShell 5.1 or higher
+    - Network connectivity to SonicWALL
+    - API access credentials
+    - HTTPS access to firewall
+    - Write access for report generation
+    
+    Security Note:
+    - Credentials should be handled securely
+    - Use SSL/TLS for API connections
+    - Follow principle of least privilege
+    - Audit during maintenance windows
 
 .PARAMETER Hostname
-    The hostname or IP address of the SonicWALL device
+    SonicWALL device hostname/IP
+    Required for API connectivity
+    Must be reachable via HTTPS
+    Example: 192.168.1.1
 
 .PARAMETER Username
-    Username for SonicWALL API authentication
+    SonicWALL administrator username
+    Requires API access permissions
+    Use dedicated audit account
+    Follow naming conventions
 
 .PARAMETER Password
-    Password for SonicWALL API authentication
+    SonicWALL administrator password
+    Use secure string when possible
+    Follow password complexity rules
+    Handle securely
 
 .PARAMETER ReportFormat
-    The format of the output report (HTML or CSV)
+    Output report format selection
+    Options: HTML or CSV
+    Default: HTML
+    Affects report styling and detail
 
 .EXAMPLE
     .\SonicWallFirewallAuditor.ps1 -Hostname "192.168.1.1" -Username "admin" -Password "password" -ReportFormat "HTML"
+    Standard audit with HTML report:
+    - Connects to specified firewall
+    - Performs full configuration audit
+    - Generates styled HTML report
+    - Includes severity indicators
+
+.EXAMPLE
+    .\SonicWallFirewallAuditor.ps1 -Hostname "fw.company.com" -Username "audituser" -Password "pass123" -ReportFormat "CSV"
+    Audit with CSV output:
+    - Uses FQDN for connection
+    - Exports data in CSV format
+    - Suitable for data analysis
+    - Compatible with reporting tools
+
+.EXAMPLE
+    $cred = Get-Credential
+    .\SonicWallFirewallAuditor.ps1 -Hostname "10.0.0.1" -Username $cred.Username -Password $cred.GetNetworkCredential().Password
+    Secure credential handling:
+    - Uses credential object
+    - Protects password in memory
+    - Follows security best practices
 #>
 
 [CmdletBinding()]
