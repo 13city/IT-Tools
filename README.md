@@ -4,7 +4,7 @@
 [![Last Commit](https://img.shields.io/github/last-commit/13city/IT_Scripts/main?style=flat)](https://github.com/13city/IT_Scripts/commits/main)
 [![Open Issues](https://img.shields.io/github/issues-raw/13city/IT_Scripts?style=flat)](https://github.com/13city/IT_Scripts/issues)
 [![Open Pull Requests](https://img.shields.io/github/issues-pr-raw/13city/IT_Scripts?style=flat)](https://github.com/13city/IT_Scripts/pulls)
-[![Visitors](https://hits.sh/github.com/13city/IT_Scripts.svg?style=flat&label=Visitors&color=007ec6)](https://hits.sh/github.com/13city/IT_Scripts/)
+
 
 <!-- Platform & Technology Coverage -->
 ![PowerShell](https://img.shields.io/badge/PowerShell-%235391FE.svg?style=for-the-badge&logo=powershell&logoColor=white)
