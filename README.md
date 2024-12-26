@@ -144,5 +144,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <!-- Repository Analytics -->
 <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1&fs=1" target="_blank" onclick="window.open(this.href, '_blank', 'fullscreen=yes'); return false;">
-  <img src="https://img.shields.io/badge/Analytics-View_Report-success?style=flat-square" alt="Repository Analytics">
+  <img src="https://img.shields.io/badge/Plain Text Passwords-blue?style=flat-square" alt="Plain Text Passwords">
 </a>
