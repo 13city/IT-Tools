@@ -1,10 +1,10 @@
 # 🛠️ Enterprise IT Administration Scripts
 
 <!-- Repository Status -->
-[![Last Commit](https://img.shields.io/github/last-commit/13city/IT-Tools/main?style=flat)](https://github.com/13city/IT-Tools/commits/main)
+[![Last Commit](https://img.shields.io/github/last-commit/13city/IT-Tools?style=flat)](https://github.com/13city/IT-Tools/commits)
 [![Open Issues](https://img.shields.io/github/issues-raw/13city/IT-Tools?style=flat)](https://github.com/13city/IT-Tools/issues)
 [![Open Pull Requests](https://img.shields.io/github/issues-pr-raw/13city/IT-Tools?style=flat)](https://github.com/13city/IT-Tools/pulls)
-[![Visitors](https://hits.sh/github.com/13city/IT-Tools.svg?style=flat&label=Visitors&color=007ec6)](https://hits.sh/github.com/13city/IT-Tools/)
+[![GitHub Repo stars](https://img.shields.io/github/stars/13city/IT-Tools?style=flat)](https://github.com/13city/IT-Tools/stargazers)
 
 <!-- Platform & Technology Coverage -->
 ![PowerShell](https://img.shields.io/badge/PowerShell-%235391FE.svg?style=for-the-badge&logo=powershell&logoColor=white)
