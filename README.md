@@ -4,7 +4,7 @@
 ![Maintained](https://img.shields.io/badge/Maintained-yes-green.svg)
 ![Status](https://img.shields.io/badge/Status-Active-success.svg)
 ![Version](https://img.shields.io/badge/Version-1.0-blue.svg)
-![Visitors](https://visitor-badge.laobi.icu/badge?page_id=IT_Scripts)
+![People Using These Tools](https://visitor-badge.laobi.icu/badge?page_id=IT_Scripts)
 
 <!-- Platform & Technology Coverage -->
 ![PowerShell](https://img.shields.io/badge/PowerShell-%235391FE.svg?style=for-the-badge&logo=powershell&logoColor=white)
