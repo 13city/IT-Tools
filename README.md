@@ -5,6 +5,7 @@
 [![Last Commit](https://img.shields.io/github/last-commit/13city/IT_Scripts/main?style=flat)](https://github.com/13city/IT_Scripts/commits/main)
 [![Open Issues](https://img.shields.io/github/issues-raw/13city/IT_Scripts?style=flat)](https://github.com/13city/IT_Scripts/issues)
 [![Open Pull Requests](https://img.shields.io/github/issues-pr-raw/13city/IT_Scripts?style=flat)](https://github.com/13city/IT_Scripts/pulls)
+[![Visitors](https://hits.sh/github.com/13city/IT_Scripts.svg?style=flat&label=Visitors&color=007ec6)](https://hits.sh/github.com/13city/IT_Scripts/)
 
 <!-- Platform & Technology Coverage -->
 ![PowerShell](https://img.shields.io/badge/PowerShell-%235391FE.svg?style=for-the-badge&logo=powershell&logoColor=white)
@@ -50,7 +51,6 @@
   <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1&fs=1" target="_blank" onclick="window.open(this.href, '_blank', 'fullscreen=yes'); return false;">
     <img src="https://img.shields.io/badge/Do Not Click-Here!!-success?style=flat-square" alt="Repository Analytics">
   </a>
-  <img src="https://hits.sh/github.com/13city/IT_Scripts.svg?style=flat-square&label=Report%20Views&color=success" alt="Analytics Views?">
 </p>
 
 A comprehensive collection of enterprise-grade IT administration scripts organized by platform and function.
@@ -149,4 +149,3 @@ Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on submit
 ## 📜 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
