@@ -1,5 +1,4 @@
-# 🛠️ Enterprise IT Administration Scripts 
-## (Formerly RMM-Diagnostics)
+# 🛠️ Enterprise IT Administration Scripts
 
 <!-- Repository Status -->
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/13city/IT_Scripts)
