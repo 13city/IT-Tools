@@ -143,4 +143,6 @@ Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on submit
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 <!-- Repository Analytics -->
-[![Repository Analytics](https://img.shields.io/badge/Analytics-View_Report-success?style=flat-square)](https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1)
+<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1&fs=1" target="_blank" onclick="window.open(this.href, '_blank', 'fullscreen=yes'); return false;">
+  <img src="https://img.shields.io/badge/Analytics-View_Report-success?style=flat-square" alt="Repository Analytics">
+</a>
