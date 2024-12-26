@@ -54,7 +54,7 @@ A comprehensive collection of enterprise-grade IT administration scripts organiz
 - [Linux](Linux/README.md) - Linux server and container management scripts
 
 ### Specialized Solutions
-- [AutomatedMonitoring](AutomatedMonitoring/README.md) - Enterprise monitoring solutions
+- [Automated Monitoring](AutomatedMonitoring/README.md) - Enterprise monitoring solutions
   - M365 Monitoring
   - Network Monitoring
   - System Health Monitoring
@@ -64,7 +64,7 @@ A comprehensive collection of enterprise-grade IT administration scripts organiz
   - L1 Support Guide
   - L2 Advanced Guide
   - L3 Enterprise Guide
-- [EnterpriseITPlaybook](EnterpriseITPlaybook/README.md)
+- [Enterprise IT Playbook](EnterpriseITPlaybook/README.md)
 
 ## 🔍 Quick Navigation
 
