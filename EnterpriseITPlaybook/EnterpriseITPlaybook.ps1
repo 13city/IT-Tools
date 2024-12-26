@@ -1,307 +1,387 @@
 #Requires -RunAsAdministrator
+#Requires -Modules ActiveDirectory, GroupPolicy, DnsServer
+
 <#
 .SYNOPSIS
-    Enterprise IT Operations Playbook for Tier 2/3 Support
+    Enterprise IT Operations Playbook for Windows Environments
 .DESCRIPTION
-    Comprehensive diagnostic and escalation framework for Windows Server environments.
-    Includes AD, DNS, Network, and Database health checks with automated escalation.
+    Comprehensive IT management toolkit for Windows enterprise environments.
+    Includes system health monitoring, security checks, maintenance tasks,
+    and automated reporting capabilities.
+.NOTES
+    Version: 2.0
+    Author: Enterprise IT Team
 #>
 
-# Initialize Logging
-$LogPath = "$env:ProgramData\EnterpriseITPlaybook"
-$LogFile = "$LogPath\Diagnostic_$(Get-Date -Format 'yyyyMMdd_HHmmss').log"
-$TicketPath = "$LogPath\Tickets"
+# Initialize Environment
+$Script:LogPath = "$env:ProgramData\EnterpriseITPlaybook"
+$Script:LogFile = "$LogPath\Operations_$(Get-Date -Format 'yyyyMMdd_HHmmss').log"
+$Script:ReportPath = "$LogPath\Reports"
+$Script:ConfigPath = "$LogPath\Config"
 
-# Ensure directories exist
-@($LogPath, $TicketPath) | ForEach-Object {
+# Create required directories
+@($LogPath, $ReportPath, $ConfigPath) | ForEach-Object {
     if (-not (Test-Path $_)) {
         New-Item -ItemType Directory -Path $_ -Force | Out-Null
     }
 }
 
-# Logging Function
+# Enhanced Logging Function
 function Write-Log {
     param(
         [string]$Message,
-        [ValidateSet('Info','Warning','Error','Critical')]$Level = 'Info',
-        [switch]$NoTicket
+        [ValidateSet('Info','Warning','Error','Critical','Success')]$Level = 'Info',
+        [switch]$NoConsole
     )
     
     $Timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
     $LogMessage = "[$Timestamp] [$Level] $Message"
     Add-Content -Path $LogFile -Value $LogMessage
     
-    switch ($Level) {
-        'Info'     { Write-Host $LogMessage -ForegroundColor Green }
-        'Warning'  { Write-Host $LogMessage -ForegroundColor Yellow }
-        'Error'    { Write-Host $LogMessage -ForegroundColor Red }
-        'Critical' { 
-            Write-Host $LogMessage -ForegroundColor Red -BackgroundColor White
-            if (-not $NoTicket) {
-                New-EscalationTicket -Issue $Message -Severity "Critical"
-            }
+    if (-not $NoConsole) {
+        $Color = switch ($Level) {
+            'Info'     { 'White' }
+            'Warning'  { 'Yellow' }
+            'Error'    { 'Red' }
+            'Critical' { 'Red' }
+            'Success'  { 'Green' }
         }
+        Write-Host $LogMessage -ForegroundColor $Color
     }
 }
 
-# Ticket Generation
-function New-EscalationTicket {
-    param(
-        [string]$Issue,
-        [ValidateSet('Low','Medium','High','Critical')]$Severity,
-        [string[]]$AttachmentPaths
-    )
+# Active Directory Health Check
+function Test-ADHealth {
+    param([switch]$Detailed)
     
-    $TicketFile = Join-Path $TicketPath "Ticket_$(Get-Date -Format 'yyyyMMdd_HHmmss').json"
-    $TicketData = @{
-        Timestamp = Get-Date -Format 'o'
-        Issue = $Issue
-        Severity = $Severity
-        ComputerName = $env:COMPUTERNAME
-        Username = $env:USERNAME
-        Logs = @{
-            DiagnosticLog = $LogFile
-            AdditionalLogs = $AttachmentPaths
-        }
-        SystemState = @{
-            OS = (Get-CimInstance Win32_OperatingSystem).Caption
-            LastBoot = (Get-CimInstance Win32_OperatingSystem).LastBootUpTime
-            Memory = @{
-                Total = [math]::Round((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory / 1GB, 2)
-                Free = [math]::Round((Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory / 1MB, 2)
-            }
-            Processor = @{
-                Load = (Get-CimInstance Win32_Processor).LoadPercentage
-                Name = (Get-CimInstance Win32_Processor).Name
-            }
-        }
-    }
-    
-    $TicketData | ConvertTo-Json -Depth 10 | Set-Content $TicketFile
-    Write-Log "Escalation ticket created: $TicketFile" -Level Warning -NoTicket
-    return $TicketFile
-}
-
-# AD Replication Status
-function Test-ADReplication {
-    Write-Log "Testing AD Replication Status..."
-    
-    try {
-        $Results = Get-ADReplicationPartnerMetadata -Target * -Scope Server
-        $FailingPartners = $Results | Where-Object { $_.LastReplicationResult -ne 0 }
-        
-        if ($FailingPartners) {
-            $Message = "AD Replication failures detected on: $($FailingPartners.Partner -join ', ')"
-            Write-Log $Message -Level Critical
-            return $false
-        }
-        
-        Write-Log "AD Replication check completed successfully"
-        return $true
-    }
-    catch {
-        Write-Log "Error testing AD replication: $_" -Level Error
-        return $false
-    }
-}
-
-# DNS Health Check
-function Test-DNSHealth {
-    Write-Log "Checking DNS Health..."
-    
+    Write-Log "Starting Active Directory health check..."
     $Issues = @()
     
-    # Test DNS Service
+    # Check DC Status
     try {
-        $DNSService = Get-Service -Name "DNS" -ErrorAction Stop
-        if ($DNSService.Status -ne "Running") {
-            $Issues += "DNS Service is not running"
-        }
-    }
-    catch {
-        $Issues += "Unable to query DNS service: $_"
-    }
-    
-    # Test DNS Resolution
-    $TestDomains = @(
-        "www.google.com",
-        $env:USERDNSDOMAIN
-    )
-    
-    foreach ($Domain in $TestDomains) {
-        try {
-            $null = Resolve-DnsName -Name $Domain -ErrorAction Stop
-        }
-        catch {
-            $Issues += "Failed to resolve $Domain"
-        }
-    }
-    
-    # Check DNS Records
-    if ($env:USERDNSDOMAIN) {
-        try {
-            $null = Get-DnsServerZone -Name $env:USERDNSDOMAIN -ErrorAction Stop
-        }
-        catch {
-            $Issues += "Unable to query DNS zone $env:USERDNSDOMAIN"
-        }
-    }
-    
-    if ($Issues) {
-        Write-Log "DNS Health Issues Found: $($Issues -join '; ')" -Level Critical
-        return $false
-    }
-    
-    Write-Log "DNS health check completed successfully"
-    return $true
-}
-
-# Firewall ACL Review
-function Test-FirewallRules {
-    Write-Log "Reviewing Firewall Configuration..."
-    
-    try {
-        $Rules = Get-NetFirewallRule | Where-Object { $_.Enabled -eq $true }
-        $RiskyRules = $Rules | Where-Object {
-            $_.Direction -eq "Inbound" -and 
-            $_.Action -eq "Allow" -and 
-            ($_.RemoteAddress -eq "Any" -or $_.RemotePort -eq "Any")
-        }
-        
-        if ($RiskyRules) {
-            $Message = "Potentially risky firewall rules found: $($RiskyRules.Name -join ', ')"
-            Write-Log $Message -Level Warning
+        $DCs = Get-ADDomainController -Filter *
+        foreach ($DC in $DCs) {
+            $Connectivity = Test-NetConnection -ComputerName $DC.HostName -Port 389 -WarningAction SilentlyContinue
+            if (-not $Connectivity.TcpTestSucceeded) {
+                $Issues += "Connectivity failed to DC: $($DC.HostName)"
+            }
             
-            # Export risky rules for review
-            $RulesFile = Join-Path $LogPath "RiskyFirewallRules.csv"
-            $RiskyRules | Export-Csv -Path $RulesFile -NoTypeInformation
-            Write-Log "Exported risky rules to: $RulesFile"
+            # Check Services
+            $Services = @('NTDS', 'DNS', 'Netlogon', 'W32Time')
+            $ServiceStatus = Invoke-Command -ComputerName $DC.HostName -ScriptBlock {
+                param($Services)
+                Get-Service -Name $Services
+            } -ArgumentList $Services -ErrorAction SilentlyContinue
+            
+            $StoppedServices = $ServiceStatus | Where-Object Status -ne 'Running'
+            if ($StoppedServices) {
+                $Issues += "Stopped services on $($DC.HostName): $($StoppedServices.Name -join ', ')"
+            }
         }
-        
-        Write-Log "Firewall review completed"
-        return $true
     }
     catch {
-        Write-Log "Error reviewing firewall rules: $_" -Level Error
-        return $false
+        $Issues += "Error checking DC status: $_"
+    }
+    
+    # Check Replication
+    try {
+        $Replication = Get-ADReplicationPartnerMetadata -Target * -Scope Server
+        $FailingReplications = $Replication | Where-Object LastReplicationResult -ne 0
+        if ($FailingReplications) {
+            $Issues += "Replication failures detected: $($FailingReplications.Partner -join ', ')"
+        }
+    }
+    catch {
+        $Issues += "Error checking replication: $_"
+    }
+    
+    # Check FSMO Roles
+    try {
+        $FSMORoles = Get-ADDomain | Select-Object PDCEmulator, RIDMaster, InfrastructureMaster
+        $FSMORoles += Get-ADForest | Select-Object DomainNamingMaster, SchemaMaster
+        
+        foreach ($Role in $FSMORoles.PSObject.Properties) {
+            $Connectivity = Test-NetConnection -ComputerName $Role.Value -Port 389 -WarningAction SilentlyContinue
+            if (-not $Connectivity.TcpTestSucceeded) {
+                $Issues += "Cannot connect to FSMO role holder: $($Role.Name) on $($Role.Value)"
+            }
+        }
+    }
+    catch {
+        $Issues += "Error checking FSMO roles: $_"
+    }
+    
+    # Return Results
+    if ($Issues) {
+        Write-Log "AD Health Check found issues: $($Issues -join '; ')" -Level Warning
+        return @{
+            Healthy = $false
+            Issues = $Issues
+            Details = if ($Detailed) { Get-ADHealthDetails }
+        }
+    }
+    
+    Write-Log "AD Health Check completed successfully" -Level Success
+    return @{
+        Healthy = $true
+        Issues = @()
+        Details = if ($Detailed) { Get-ADHealthDetails }
     }
 }
 
-# Database Connectivity Check
-function Test-DatabaseConnectivity {
+# Security Compliance Check
+function Test-SecurityCompliance {
+    param([switch]$GenerateReport)
+    
+    Write-Log "Starting security compliance check..."
+    $Findings = @()
+    
+    # Password Policy Check
+    try {
+        $PasswordPolicy = Get-ADDefaultDomainPasswordPolicy
+        if ($PasswordPolicy.MinPasswordLength -lt 12) {
+            $Findings += "Minimum password length is less than recommended (12)"
+        }
+        if (-not $PasswordPolicy.ComplexityEnabled) {
+            $Findings += "Password complexity is not enabled"
+        }
+    }
+    catch {
+        $Findings += "Error checking password policy: $_"
+    }
+    
+    # Privileged Group Audit
+    try {
+        $AdminGroups = @('Domain Admins', 'Enterprise Admins', 'Schema Admins')
+        foreach ($Group in $AdminGroups) {
+            $Members = Get-ADGroupMember -Identity $Group -Recursive
+            if ($Members.Count -gt 5) {
+                $Findings += "$Group has $($Members.Count) members - review recommended"
+            }
+        }
+    }
+    catch {
+        $Findings += "Error checking admin groups: $_"
+    }
+    
+    # Inactive Account Check
+    try {
+        $InactiveAccounts = Search-ADAccount -AccountInactive -TimeSpan 90.00:00:00
+        if ($InactiveAccounts) {
+            $Findings += "Found $($InactiveAccounts.Count) inactive accounts"
+        }
+    }
+    catch {
+        $Findings += "Error checking inactive accounts: $_"
+    }
+    
+    # Generate Report if requested
+    if ($GenerateReport) {
+        $ReportFile = "$ReportPath\SecurityCompliance_$(Get-Date -Format 'yyyyMMdd').html"
+        $ReportContent = @"
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Security Compliance Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .finding { margin: 10px 0; padding: 10px; border-left: 4px solid #ff9800; }
+        .critical { border-left-color: #f44336; }
+    </style>
+</head>
+<body>
+    <h1>Security Compliance Report</h1>
+    <p>Generated: $(Get-Date)</p>
+    <h2>Findings</h2>
+    $(foreach ($Finding in $Findings) {
+        "<div class='finding'>$Finding</div>"
+    })
+</body>
+</html>
+"@
+        $ReportContent | Set-Content -Path $ReportFile
+        Write-Log "Security compliance report generated: $ReportFile" -Level Success
+    }
+    
+    return @{
+        Compliant = $Findings.Count -eq 0
+        Findings = $Findings
+    }
+}
+
+# System Performance Analysis
+function Get-SystemPerformanceAnalysis {
     param(
-        [string]$ServerInstance,
-        [string]$Database,
-        [PSCredential]$Credential
+        [int]$SampleInterval = 5,
+        [int]$SampleCount = 12
     )
     
-    Write-Log "Testing database connectivity to $ServerInstance..."
+    Write-Log "Starting system performance analysis..."
+    $Metrics = @()
     
-    try {
-        $ConnectionString = "Server=$ServerInstance;Database=$Database;Integrated Security=True;"
-        $Connection = New-Object System.Data.SqlClient.SqlConnection $ConnectionString
-        $Connection.Open()
-        
-        if ($Connection.State -eq 'Open') {
-            Write-Log "Successfully connected to database"
-            $Connection.Close()
-            return $true
-        }
-    }
-    catch {
-        Write-Log "Database connectivity failed: $_" -Level Critical
-        return $false
-    }
-}
-
-# Performance Metrics Collection
-function Get-SystemPerformanceMetrics {
-    Write-Log "Collecting system performance metrics..."
-    
-    try {
-        $Metrics = @{
-            CPU = (Get-CimInstance Win32_Processor).LoadPercentage
+    for ($i = 1; $i -le $SampleCount; $i++) {
+        $Sample = @{
+            Timestamp = Get-Date
+            CPU = (Get-Counter '\Processor(_Total)\% Processor Time').CounterSamples.CookedValue
             Memory = @{
-                Total = [math]::Round((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory / 1GB, 2)
-                Free = [math]::Round((Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory / 1MB, 2)
+                Total = (Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory / 1GB
+                Available = (Get-Counter '\Memory\Available MBytes').CounterSamples.CookedValue / 1024
             }
-            Disk = Get-CimInstance Win32_LogicalDisk | Where-Object { $_.DriveType -eq 3 } | ForEach-Object {
-                @{
-                    Drive = $_.DeviceID
-                    FreeSpace = [math]::Round($_.FreeSpace / 1GB, 2)
-                    TotalSpace = [math]::Round($_.Size / 1GB, 2)
-                }
+            DiskIO = @{
+                ReadBytes = (Get-Counter '\PhysicalDisk(_Total)\Disk Read Bytes/sec').CounterSamples.CookedValue
+                WriteBytes = (Get-Counter '\PhysicalDisk(_Total)\Disk Write Bytes/sec').CounterSamples.CookedValue
             }
-        }
-        
-        # Check for critical conditions
-        if ($Metrics.CPU -gt 90) {
-            Write-Log "Critical CPU usage detected: $($Metrics.CPU)%" -Level Critical
-        }
-        
-        $FreeMemoryPercent = ($Metrics.Memory.Free / $Metrics.Memory.Total) * 100
-        if ($FreeMemoryPercent -lt 10) {
-            Write-Log "Critical memory condition: $($FreeMemoryPercent)% free" -Level Critical
-        }
-        
-        foreach ($Drive in $Metrics.Disk) {
-            $FreeSpacePercent = ($Drive.FreeSpace / $Drive.TotalSpace) * 100
-            if ($FreeSpacePercent -lt 10) {
-                Write-Log "Critical disk space on $($Drive.Drive): $($FreeSpacePercent)% free" -Level Critical
+            NetworkIO = @{
+                ReceivedBytes = (Get-Counter '\Network Interface(*)\Bytes Received/sec').CounterSamples.CookedValue
+                SentBytes = (Get-Counter '\Network Interface(*)\Bytes Sent/sec').CounterSamples.CookedValue
             }
         }
         
-        return $Metrics
+        $Metrics += $Sample
+        
+        if ($i -lt $SampleCount) {
+            Start-Sleep -Seconds $SampleInterval
+        }
     }
-    catch {
-        Write-Log "Error collecting performance metrics: $_" -Level Error
-        return $null
+    
+    # Analyze metrics
+    $Analysis = @{
+        CPU = @{
+            Average = ($Metrics.CPU | Measure-Object -Average).Average
+            Max = ($Metrics.CPU | Measure-Object -Maximum).Maximum
+        }
+        Memory = @{
+            AverageUsedGB = ($Metrics.Memory | ForEach-Object { $_.Total - $_.Available } | Measure-Object -Average).Average
+            PercentUsed = ($Metrics.Memory | ForEach-Object { (($_.Total - $_.Available) / $_.Total) * 100 } | Measure-Object -Average).Average
+        }
+        DiskIO = @{
+            AverageReadMBps = (($Metrics.DiskIO.ReadBytes | Measure-Object -Average).Average / 1MB)
+            AverageWriteMBps = (($Metrics.DiskIO.WriteBytes | Measure-Object -Average).Average / 1MB)
+        }
+        NetworkIO = @{
+            AverageReceivedMBps = (($Metrics.NetworkIO.ReceivedBytes | Measure-Object -Average).Average / 1MB)
+            AverageSentMBps = (($Metrics.NetworkIO.SentBytes | Measure-Object -Average).Average / 1MB)
+        }
+    }
+    
+    # Generate alerts for concerning metrics
+    $Alerts = @()
+    
+    if ($Analysis.CPU.Average -gt 80) {
+        $Alerts += "High average CPU usage: $([math]::Round($Analysis.CPU.Average, 2))%"
+    }
+    
+    if ($Analysis.Memory.PercentUsed -gt 90) {
+        $Alerts += "High memory usage: $([math]::Round($Analysis.Memory.PercentUsed, 2))%"
+    }
+    
+    return @{
+        Metrics = $Metrics
+        Analysis = $Analysis
+        Alerts = $Alerts
     }
 }
 
-# Main Diagnostic Function
-function Start-ServerDiagnostics {
+# Main Operations Function
+function Start-EnterpriseITOperations {
     param(
-        [string]$DatabaseServer,
-        [string]$DatabaseName
+        [switch]$FullHealthCheck,
+        [switch]$SecurityAudit,
+        [switch]$PerformanceAnalysis,
+        [switch]$GenerateReport
     )
     
-    Write-Log "Starting comprehensive server diagnostics..."
-    Write-Log "----------------------------------------"
+    Write-Log "Starting Enterprise IT Operations..."
+    $Results = @{}
     
-    # Initialize results collection
-    $DiagnosticResults = @{
-        ADReplication = $false
-        DNSHealth = $false
-        FirewallRules = $false
-        DatabaseConnectivity = $false
-        PerformanceMetrics = $null
-        Timestamp = Get-Date
+    if ($FullHealthCheck -or $GenerateReport) {
+        $Results.ADHealth = Test-ADHealth -Detailed
+        Write-Log "AD Health Check completed"
     }
     
-    # Run diagnostics
-    $DiagnosticResults.ADReplication = Test-ADReplication
-    $DiagnosticResults.DNSHealth = Test-DNSHealth
-    $DiagnosticResults.FirewallRules = Test-FirewallRules
-    
-    if ($DatabaseServer -and $DatabaseName) {
-        $DiagnosticResults.DatabaseConnectivity = Test-DatabaseConnectivity -ServerInstance $DatabaseServer -Database $DatabaseName
+    if ($SecurityAudit -or $GenerateReport) {
+        $Results.Security = Test-SecurityCompliance
+        Write-Log "Security Compliance Check completed"
     }
     
-    $DiagnosticResults.PerformanceMetrics = Get-SystemPerformanceMetrics
+    if ($PerformanceAnalysis -or $GenerateReport) {
+        $Results.Performance = Get-SystemPerformanceAnalysis
+        Write-Log "Performance Analysis completed"
+    }
     
-    # Export results
-    $ResultsFile = Join-Path $LogPath "DiagnosticResults_$(Get-Date -Format 'yyyyMMdd_HHmmss').json"
-    $DiagnosticResults | ConvertTo-Json -Depth 10 | Set-Content $ResultsFile
+    if ($GenerateReport) {
+        $ReportFile = "$ReportPath\EnterpriseReport_$(Get-Date -Format 'yyyyMMdd_HHmmss').html"
+        $ReportContent = @"
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enterprise IT Operations Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        .alert { color: #721c24; background-color: #f8d7da; padding: 10px; margin: 5px 0; }
+        .success { color: #155724; background-color: #d4edda; padding: 10px; margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <h1>Enterprise IT Operations Report</h1>
+    <p>Generated: $(Get-Date)</p>
     
-    Write-Log "----------------------------------------"
-    Write-Log "Diagnostic scan complete. Results saved to: $ResultsFile"
+    $(if ($Results.ADHealth) {
+        @"
+    <div class='section'>
+        <h2>Active Directory Health</h2>
+        <div class='$(if($Results.ADHealth.Healthy){"success"}else{"alert"})'>
+            Status: $(if($Results.ADHealth.Healthy){"Healthy"}else{"Issues Detected"})
+        </div>
+        $(if($Results.ADHealth.Issues) {
+            "<ul>" + ($Results.ADHealth.Issues | ForEach-Object { "<li>$_</li>" }) + "</ul>"
+        })
+    </div>
+"@
+    })
     
-    # Return results for further processing
-    return $DiagnosticResults
+    $(if ($Results.Security) {
+        @"
+    <div class='section'>
+        <h2>Security Compliance</h2>
+        <div class='$(if($Results.Security.Compliant){"success"}else{"alert"})'>
+            Status: $(if($Results.Security.Compliant){"Compliant"}else{"Non-Compliant"})
+        </div>
+        $(if($Results.Security.Findings) {
+            "<ul>" + ($Results.Security.Findings | ForEach-Object { "<li>$_</li>" }) + "</ul>"
+        })
+    </div>
+"@
+    })
+    
+    $(if ($Results.Performance) {
+        @"
+    <div class='section'>
+        <h2>Performance Analysis</h2>
+        <h3>System Metrics</h3>
+        <ul>
+            <li>Average CPU Usage: $([math]::Round($Results.Performance.Analysis.CPU.Average, 2))%</li>
+            <li>Memory Usage: $([math]::Round($Results.Performance.Analysis.Memory.PercentUsed, 2))%</li>
+            <li>Disk I/O (Read/Write MB/s): $([math]::Round($Results.Performance.Analysis.DiskIO.AverageReadMBps, 2)) / $([math]::Round($Results.Performance.Analysis.DiskIO.AverageWriteMBps, 2))</li>
+        </ul>
+        $(if($Results.Performance.Alerts) {
+            "<h3>Alerts</h3><ul>" + ($Results.Performance.Alerts | ForEach-Object { "<li>$_</li>" }) + "</ul>"
+        })
+    </div>
+"@
+    })
+</body>
+</html>
+"@
+        $ReportContent | Set-Content -Path $ReportFile
+        Write-Log "Enterprise IT Operations report generated: $ReportFile" -Level Success
+    }
+    
+    return $Results
 }
 
-# Execute diagnostics if running directly
+# Execute if running directly
 if ($MyInvocation.InvocationName -ne '.') {
-    Start-ServerDiagnostics
+    Start-EnterpriseITOperations -FullHealthCheck -SecurityAudit -PerformanceAnalysis -GenerateReport
 }
