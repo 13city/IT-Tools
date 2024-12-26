@@ -1,128 +1,98 @@
 # Microsoft 365 Troubleshooting Guides
 
-Comprehensive troubleshooting guides for Microsoft 365 services across different support tiers.
+A comprehensive collection of troubleshooting guides for Microsoft 365 services, organized by support tier level.
 
-## 📚 Support Tiers
+## 🎯 Quick Navigation
 
-### [L1 Support Guide](L1_M365_Troubleshooting_Guide/)
-First-line support documentation for common issues and basic troubleshooting.
+- [L1 Support Guide](L1_M365_Troubleshooting_Guide/) - First-line support and common issues
+- [L2 Support Guide](L2_M365_Troubleshooting_Guide/M365_L2_Advanced_Troubleshooting_Guide.md) - Advanced technical issues
+- [L3 Support Guide](L3_M365_Troubleshooting_Guide/M365_L3_Enterprise_Troubleshooting_Guide.md) - Enterprise-level support
+- [General Methodology](general_methodology.md) - Universal troubleshooting approach
 
-#### Contents
-- [General Methodology](L1_M365_Troubleshooting_Guide/general_methodology.md)
+## 📚 Guide Structure
+
+### L1 Support Guide
+For first-line support handling common issues and basic troubleshooting.
+
 - Common Issues
   - [Authentication](L1_M365_Troubleshooting_Guide/common_issues/authentication.md)
   - [Connectivity](L1_M365_Troubleshooting_Guide/common_issues/connectivity.md)
   - [Licensing](L1_M365_Troubleshooting_Guide/common_issues/licensing.md)
   - [Mobile Access](L1_M365_Troubleshooting_Guide/common_issues/mobile_access.md)
   - [Performance](L1_M365_Troubleshooting_Guide/common_issues/performance.md)
-- Service-Specific Guides
-  - [Azure AD](L1_M365_Troubleshooting_Guide/services/azure_ad.md)
-  - [Exchange Online](L1_M365_Troubleshooting_Guide/services/exchange_online.md)
-  - [SharePoint Online](L1_M365_Troubleshooting_Guide/services/sharepoint_online.md)
-  - [Teams](L1_M365_Troubleshooting_Guide/services/teams.md)
-  - [OneDrive](L1_M365_Troubleshooting_Guide/services/onedrive.md)
-  - [Office Apps](L1_M365_Troubleshooting_Guide/services/office_apps.md)
+
 - Diagnostic Tools
   - [Microsoft Tools](L1_M365_Troubleshooting_Guide/diagnostic_tools/microsoft_tools.md)
   - [Network Testing](L1_M365_Troubleshooting_Guide/diagnostic_tools/network_testing.md)
   - [PowerShell Scripts](L1_M365_Troubleshooting_Guide/diagnostic_tools/powershell_scripts.md)
+
 - Emergency Response
   - [Data Recovery](L1_M365_Troubleshooting_Guide/emergency_response/data_recovery.md)
   - [Incident Response](L1_M365_Troubleshooting_Guide/emergency_response/incident_response.md)
   - [Security Incident](L1_M365_Troubleshooting_Guide/emergency_response/security_incident.md)
 
-### [L2 Support Guide](L2_M365_Troubleshooting_Guide/)
-Advanced troubleshooting for complex issues requiring deeper technical expertise.
+### L2 Support Guide
+For advanced technical issues requiring deeper expertise.
 
-#### Key Areas
 - Complex scenario resolution
-- PowerShell diagnostic commands
-- Advanced network troubleshooting
-- Performance optimization techniques
-- Detailed technical analysis
-- Service integration issues
+- Advanced PowerShell diagnostics
+- Performance optimization
 - Security investigations
-- Compliance management
+- Service integration issues
 
-### [L3 Support Guide](L3_M365_Troubleshooting_Guide/)
-Enterprise-level support for critical issues and complex environments.
+### L3 Support Guide
+For enterprise-level issues and complex environments.
 
-#### Key Areas
 - Enterprise architecture troubleshooting
 - Complex hybrid scenarios
 - Advanced identity federation
-- Cross-forest Exchange issues
-- Performance at scale solutions
+- Performance at scale
 - Custom solution development
-- Security incident response
-- Disaster recovery
 
-## 🎯 Guide Usage
+## 🛠 Tools & Resources
 
-### L1 Support (First Line)
-- Initial problem assessment
-- Basic troubleshooting steps
-- Common issue resolution
-- Clear escalation paths
-- User communication templates
-
-### L2 Support (Advanced)
-- Complex issue investigation
-- Advanced diagnostic procedures
-- Service integration problems
-- Performance optimization
-- Security investigations
-
-### L3 Support (Enterprise)
-- Architecture-level issues
-- Custom solution development
-- Critical incident management
-- Enterprise-wide problems
-- Complex migrations
-
-## 🔧 Tools & Resources
+### Microsoft Admin Centers
+- [Microsoft 365 Admin Center](https://admin.microsoft.com)
+- [Exchange Admin Center](https://admin.exchange.microsoft.com)
+- [SharePoint Admin Center](https://admin.microsoft.com/sharepoint)
+- [Teams Admin Center](https://admin.teams.microsoft.com)
+- [Security & Compliance Center](https://protection.office.com)
 
 ### Diagnostic Tools
-- Microsoft 365 Admin Center
-- Microsoft Support and Recovery Assistant
-- Exchange Online PowerShell
-- SharePoint Online Management Shell
-- Microsoft Teams PowerShell
-- Azure AD PowerShell
-- Network testing tools
-- Log analysis tools
+- [Microsoft Support and Recovery Assistant](https://aka.ms/SaRA)
+- [Microsoft 365 Network Connectivity Test](https://connectivity.office.com)
+- [Remote Connectivity Analyzer](https://testconnectivity.microsoft.com)
+- [Microsoft 365 Health Dashboard](https://status.office.com)
 
-### Documentation Resources
-- Microsoft 365 Service Descriptions
-- Microsoft 365 Roadmap
-- Security & Compliance Center
-- Microsoft 365 Network Connectivity Test
-- Office 365 URL & IP Ranges
+### PowerShell Modules
+- [Microsoft Graph PowerShell](https://docs.microsoft.com/powershell/microsoftgraph)
+- [Exchange Online PowerShell](https://docs.microsoft.com/powershell/exchange/exchange-online-powershell)
+- [SharePoint Online PowerShell](https://docs.microsoft.com/powershell/sharepoint/sharepoint-online/connect-sharepoint-online)
+- [Teams PowerShell](https://docs.microsoft.com/microsoftteams/teams-powershell-overview)
 
-## 📈 Best Practices
+## 📋 Best Practices
 
-### Problem Management
-1. Systematic issue documentation
-2. Clear escalation procedures
-3. Root cause analysis
-4. Knowledge base maintenance
-5. Solution validation
+### General Guidelines
+1. Always start with the [General Methodology](general_methodology.md)
+2. Use appropriate diagnostic tools for the issue
+3. Document all troubleshooting steps
+4. Follow proper escalation procedures
+5. Maintain clear communication with users
 
-### Communication
-1. Regular status updates
-2. Clear technical documentation
-3. User-friendly instructions
-4. Escalation notifications
-5. Resolution confirmation
+### When to Escalate
+- L1 → L2
+  - Complex technical issues
+  - Multiple service integration problems
+  - Advanced security concerns
+  - Performance optimization needs
 
-### Security
-1. Access management
-2. Audit logging
-3. Compliance monitoring
-4. Security incident response
-5. Data protection procedures
+- L2 → L3
+  - Enterprise-wide issues
+  - Complex hybrid scenarios
+  - Custom solution requirements
+  - Critical security incidents
 
-## 🔄 Maintenance
+## 🔄 Guide Maintenance
 
 These guides are regularly updated to reflect:
 - New service features
@@ -130,3 +100,11 @@ These guides are regularly updated to reflect:
 - Security recommendations
 - Best practices
 - Tool updates
+
+
+## 📞 Support Resources
+
+- Microsoft 365 Service Status: [status.office.com](https://status.office.com)
+- Microsoft 365 Community: [techcommunity.microsoft.com](https://techcommunity.microsoft.com)
+- Microsoft Docs: [docs.microsoft.com](https://docs.microsoft.com)
+- Microsoft Learn: [learn.microsoft.com](https://learn.microsoft.com)
