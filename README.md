@@ -5,6 +5,7 @@
 [![Open Issues](https://img.shields.io/github/issues-raw/13city/IT-Tools?style=flat)](https://github.com/13city/IT-Tools/issues)
 [![Open Pull Requests](https://img.shields.io/github/issues-pr-raw/13city/IT-Tools?style=flat)](https://github.com/13city/IT-Tools/pulls)
 [![GitHub Repo stars](https://img.shields.io/github/stars/13city/IT-Tools?style=flat)](https://github.com/13city/IT-Tools/stargazers)
+[![Visitors](https://hits.sh/github.com/ako/IT_Scripts.svg?style=flat&label=Visitors&color=007ec6)](https://hits.sh/github.com/ako/IT_Scripts/)
 
 <!-- Platform & Technology Coverage -->
 ![PowerShell](https://img.shields.io/badge/PowerShell-%235391FE.svg?style=for-the-badge&logo=powershell&logoColor=white)
